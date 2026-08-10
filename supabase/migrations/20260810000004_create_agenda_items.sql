@@ -36,21 +36,7 @@ create index if not exists idx_agenda_items_status on public.agenda_items (statu
 create trigger set_updated_at
   before update on public.agenda_items
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.agenda_items enable row level security;
-
-create policy "agenda_items_select_anon" on public.agenda_items
-  for select to anon using (true);
-
-create policy "agenda_items_select_authenticated" on public.agenda_items
-  for select to authenticated using (true);
-
-create policy "agenda_items_insert_admin" on public.agenda_items
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "agenda_items_update_admin" on public.agenda_items
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "agenda_items_delete_admin" on public.agenda_items
-  for delete to authenticated using (utils.is_admin());

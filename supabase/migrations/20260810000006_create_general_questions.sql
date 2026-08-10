@@ -31,21 +31,7 @@ create unique index if not exists idx_general_questions_assembly_order
 create trigger set_updated_at
   before update on public.general_questions
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.general_questions enable row level security;
-
-create policy "general_questions_select_anon" on public.general_questions
-  for select to anon using (true);
-
-create policy "general_questions_select_authenticated" on public.general_questions
-  for select to authenticated using (true);
-
-create policy "general_questions_insert_admin" on public.general_questions
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "general_questions_update_admin" on public.general_questions
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "general_questions_delete_admin" on public.general_questions
-  for delete to authenticated using (utils.is_admin());

@@ -25,22 +25,7 @@ create index if not exists idx_agenda_summaries_agenda_item_id on public.agenda_
 create trigger set_updated_at
   before update on public.agenda_summaries
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.agenda_summaries enable row level security;
-
-create policy "agenda_summaries_select_anon" on public.agenda_summaries
-  for select to anon using (true);
-
-create policy "agenda_summaries_select_authenticated" on public.agenda_summaries
-  for select to authenticated using (true);
-
--- 要約の生成・再生成は管理者、またはサーバー側のservice roleから行う想定
-create policy "agenda_summaries_insert_admin" on public.agenda_summaries
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "agenda_summaries_update_admin" on public.agenda_summaries
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "agenda_summaries_delete_admin" on public.agenda_summaries
-  for delete to authenticated using (utils.is_admin());

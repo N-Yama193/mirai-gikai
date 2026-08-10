@@ -34,6 +34,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      agenda_items: {
+        Row: {
+          assembly_id: string
+          category: string
+          created_at: string
+          decided_on: string | null
+          display_order: number
+          id: string
+          item_number: string
+          proposal_reason: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assembly_id: string
+          category: string
+          created_at?: string
+          decided_on?: string | null
+          display_order?: number
+          id?: string
+          item_number: string
+          proposal_reason?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assembly_id?: string
+          category?: string
+          created_at?: string
+          decided_on?: string | null
+          display_order?: number
+          id?: string
+          item_number?: string
+          proposal_reason?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agenda_items_assembly_id_fkey"
+            columns: ["assembly_id"]
+            isOneToOne: false
+            referencedRelation: "assemblies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agenda_summaries: {
+        Row: {
+          agenda_item_id: string
+          content: string
+          created_at: string
+          generated_at: string
+          generated_by: string | null
+          id: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          agenda_item_id: string
+          content: string
+          created_at?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          mode: string
+          updated_at?: string
+        }
+        Update: {
+          agenda_item_id?: string
+          content?: string
+          created_at?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agenda_summaries_agenda_item_id_fkey"
+            columns: ["agenda_item_id"]
+            isOneToOne: false
+            referencedRelation: "agenda_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_rate_limits: {
         Row: {
           key: string
@@ -49,6 +140,45 @@ export type Database = {
           key?: string
           request_count?: number
           window_start?: string
+        }
+        Relationships: []
+      }
+      assemblies: {
+        Row: {
+          created_at: string
+          end_date: string
+          fiscal_year: number
+          id: string
+          name: string
+          session_number: number
+          session_type: string
+          start_date: string
+          total_agenda_items: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          fiscal_year: number
+          id?: string
+          name: string
+          session_number: number
+          session_type: string
+          start_date: string
+          total_agenda_items?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          fiscal_year?: number
+          id?: string
+          name?: string
+          session_number?: number
+          session_type?: string
+          start_date?: string
+          total_agenda_items?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -289,6 +419,45 @@ export type Database = {
           },
         ]
       }
+      council_members: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          party_group: string | null
+          photo_url: string | null
+          role: string
+          seat_number: number | null
+          term_end: string | null
+          term_start: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          party_group?: string | null
+          photo_url?: string | null
+          role?: string
+          seat_number?: number | null
+          term_end?: string | null
+          term_start?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          party_group?: string | null
+          photo_url?: string | null
+          role?: string
+          seat_number?: number | null
+          term_end?: string | null
+          term_start?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       diet_sessions: {
         Row: {
           created_at: string
@@ -354,6 +523,57 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      general_questions: {
+        Row: {
+          assembly_id: string
+          council_member_id: string
+          created_at: string
+          id: string
+          order_number: number
+          page_end: number | null
+          page_start: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assembly_id: string
+          council_member_id: string
+          created_at?: string
+          id?: string
+          order_number: number
+          page_end?: number | null
+          page_start?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assembly_id?: string
+          council_member_id?: string
+          created_at?: string
+          id?: string
+          order_number?: number
+          page_end?: number | null
+          page_start?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "general_questions_assembly_id_fkey"
+            columns: ["assembly_id"]
+            isOneToOne: false
+            referencedRelation: "assemblies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "general_questions_council_member_id_fkey"
+            columns: ["council_member_id"]
+            isOneToOne: false
+            referencedRelation: "council_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       interview_configs: {
         Row: {
@@ -706,6 +926,50 @@ export type Database = {
           },
         ]
       }
+      minutes_documents: {
+        Row: {
+          assembly_id: string
+          created_at: string
+          extraction_status: string
+          full_text: string | null
+          id: string
+          page_count: number | null
+          published_date: string | null
+          source_pdf_url: string
+          updated_at: string
+        }
+        Insert: {
+          assembly_id: string
+          created_at?: string
+          extraction_status?: string
+          full_text?: string | null
+          id?: string
+          page_count?: number | null
+          published_date?: string | null
+          source_pdf_url: string
+          updated_at?: string
+        }
+        Update: {
+          assembly_id?: string
+          created_at?: string
+          extraction_status?: string
+          full_text?: string | null
+          id?: string
+          page_count?: number | null
+          published_date?: string | null
+          source_pdf_url?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "minutes_documents_assembly_id_fkey"
+            columns: ["assembly_id"]
+            isOneToOne: false
+            referencedRelation: "assemblies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mirai_stances: {
         Row: {
           bill_id: string
@@ -772,6 +1036,88 @@ export type Database = {
             columns: ["bill_id"]
             isOneToOne: false
             referencedRelation: "bills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      question_topic_summaries: {
+        Row: {
+          content: string
+          created_at: string
+          generated_at: string
+          generated_by: string | null
+          id: string
+          mode: string
+          question_topic_id: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          mode: string
+          question_topic_id: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          mode?: string
+          question_topic_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_topic_summaries_question_topic_id_fkey"
+            columns: ["question_topic_id"]
+            isOneToOne: false
+            referencedRelation: "question_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      question_topics: {
+        Row: {
+          created_at: string
+          department: string | null
+          display_order: number
+          general_question_id: string
+          id: string
+          raw_excerpt: string
+          topic_title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          display_order?: number
+          general_question_id: string
+          id?: string
+          raw_excerpt: string
+          topic_title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          display_order?: number
+          general_question_id?: string
+          id?: string
+          raw_excerpt?: string
+          topic_title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_topics_general_question_id_fkey"
+            columns: ["general_question_id"]
+            isOneToOne: false
+            referencedRelation: "general_questions"
             referencedColumns: ["id"]
           },
         ]
@@ -1573,3 +1919,4 @@ export const Constants = {
     },
   },
 } as const
+

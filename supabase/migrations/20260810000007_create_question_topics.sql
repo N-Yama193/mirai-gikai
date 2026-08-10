@@ -25,25 +25,10 @@ create index if not exists idx_question_topics_general_question_id on public.que
 create trigger set_updated_at
   before update on public.question_topics
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.question_topics enable row level security;
-
-create policy "question_topics_select_anon" on public.question_topics
-  for select to anon using (true);
-
-create policy "question_topics_select_authenticated" on public.question_topics
-  for select to authenticated using (true);
-
-create policy "question_topics_insert_admin" on public.question_topics
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "question_topics_update_admin" on public.question_topics
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "question_topics_delete_admin" on public.question_topics
-  for delete to authenticated using (utils.is_admin());
-
 
 -- 論点ごとのAI要約（やさしく/詳しく）。agenda_summariesと同構造だが対象がquestion_topicsのため別テーブルにしている
 create table if not exists public.question_topic_summaries (
@@ -65,21 +50,7 @@ create index if not exists idx_question_topic_summaries_topic_id on public.quest
 create trigger set_updated_at
   before update on public.question_topic_summaries
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.question_topic_summaries enable row level security;
-
-create policy "question_topic_summaries_select_anon" on public.question_topic_summaries
-  for select to anon using (true);
-
-create policy "question_topic_summaries_select_authenticated" on public.question_topic_summaries
-  for select to authenticated using (true);
-
-create policy "question_topic_summaries_insert_admin" on public.question_topic_summaries
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "question_topic_summaries_update_admin" on public.question_topic_summaries
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "question_topic_summaries_delete_admin" on public.question_topic_summaries
-  for delete to authenticated using (utils.is_admin());

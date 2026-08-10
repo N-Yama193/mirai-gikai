@@ -33,22 +33,7 @@ create unique index if not exists idx_assemblies_year_type_number
 create trigger set_updated_at
   before update on public.assemblies
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
--- RLS: 誰でも閲覧可能、書き込みは管理者のみ
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.assemblies enable row level security;
-
-create policy "assemblies_select_anon" on public.assemblies
-  for select to anon using (true);
-
-create policy "assemblies_select_authenticated" on public.assemblies
-  for select to authenticated using (true);
-
-create policy "assemblies_insert_admin" on public.assemblies
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "assemblies_update_admin" on public.assemblies
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "assemblies_delete_admin" on public.assemblies
-  for delete to authenticated using (utils.is_admin());

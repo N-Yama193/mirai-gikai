@@ -29,21 +29,7 @@ create index if not exists idx_minutes_documents_assembly_id on public.minutes_d
 create trigger set_updated_at
   before update on public.minutes_documents
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.minutes_documents enable row level security;
-
-create policy "minutes_documents_select_anon" on public.minutes_documents
-  for select to anon using (true);
-
-create policy "minutes_documents_select_authenticated" on public.minutes_documents
-  for select to authenticated using (true);
-
-create policy "minutes_documents_insert_admin" on public.minutes_documents
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "minutes_documents_update_admin" on public.minutes_documents
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "minutes_documents_delete_admin" on public.minutes_documents
-  for delete to authenticated using (utils.is_admin());

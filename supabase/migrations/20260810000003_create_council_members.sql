@@ -27,21 +27,7 @@ create index if not exists idx_council_members_seat_number on public.council_mem
 create trigger set_updated_at
   before update on public.council_members
   for each row
-  execute function utils.update_timestamp();
+  execute function update_updated_at_column();
 
+-- RLS: ポリシーは定義せずデフォルト全拒否。データアクセスはcreateAdminClient()経由、認可はアプリ層で行う
 alter table public.council_members enable row level security;
-
-create policy "council_members_select_anon" on public.council_members
-  for select to anon using (true);
-
-create policy "council_members_select_authenticated" on public.council_members
-  for select to authenticated using (true);
-
-create policy "council_members_insert_admin" on public.council_members
-  for insert to authenticated with check (utils.is_admin());
-
-create policy "council_members_update_admin" on public.council_members
-  for update to authenticated using (utils.is_admin()) with check (utils.is_admin());
-
-create policy "council_members_delete_admin" on public.council_members
-  for delete to authenticated using (utils.is_admin());

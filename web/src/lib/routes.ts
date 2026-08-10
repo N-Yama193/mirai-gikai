@@ -48,4 +48,11 @@ export const routes = {
 
   // ── 国会セッション ────────────────────────────────
   kokkaiSessionBills: (slug: string) => `/kokkai/${slug}/bills` as const,
+
+  // ── 広川町議会 ────────────────────────────────────
+  assemblyList: () => "/gikai" as const,
+  generalQuestionList: (assemblyId: string) =>
+    `/gikai/${assemblyId}/general-questions` as const,
+  generalQuestionDetail: (assemblyId: string, questionId: string) =>
+    `/gikai/${assemblyId}/general-questions/${questionId}` as const,
 } as const;
