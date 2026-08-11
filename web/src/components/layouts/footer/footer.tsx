@@ -1,9 +1,9 @@
 "use client";
 
 import type { Route } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FORK_DISCLAIMER, SITE_NAME, UPSTREAM_SITE_URL } from "@/config/site";
 import { isInterviewPage } from "@/lib/page-layout-utils";
 import { routes } from "@/lib/routes";
 import { policyLinks, primaryLinks } from "./footer.config";
@@ -21,6 +21,7 @@ export function Footer() {
         <FooterLogoSection />
         <FooterPrimaryLinks />
         <FooterPolicies />
+        <FooterUpstreamNote />
         <FooterCopyright />
       </div>
     </footer>
@@ -30,15 +31,35 @@ export function Footer() {
 function FooterLogoSection() {
   return (
     <div className="flex flex-col items-center text-center mb-9">
-      <Link href={routes.home()} aria-label="みらい議会 トップページ">
-        <Image
-          src="/img/logo.svg"
-          alt="みらい議会"
-          width={150}
-          height={128}
-          className="h-auto"
-        />
+      <Link href={routes.home()} aria-label={`${SITE_NAME} トップページ`}>
+        <span className="text-lg font-bold text-hirokawa-indigo">
+          {SITE_NAME}
+        </span>
       </Link>
+      <hr className="kasuri-divider mt-3 w-32" />
+    </div>
+  );
+}
+
+/**
+ * FORK_GUIDELINES.md が必須とする免責文言と、本家への言及。
+ */
+function FooterUpstreamNote() {
+  return (
+    <div className="mb-5 flex flex-col gap-1 text-center text-[12px] leading-relaxed text-slate-800">
+      <p className="font-bold">{FORK_DISCLAIMER}</p>
+      <p>
+        本サイトは、チームみらいが開発した{" "}
+        <a
+          href={UPSTREAM_SITE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
+          みらい議会
+        </a>{" "}
+        をベースにしています。
+      </p>
     </div>
   );
 }
@@ -94,7 +115,7 @@ function FooterPolicies() {
 function FooterCopyright() {
   return (
     <div className="text-center text-sm font-medium text-slate-800">
-      © 2025 Team Mirai All rights Reserved
+      © 2026 {SITE_NAME}
     </div>
   );
 }

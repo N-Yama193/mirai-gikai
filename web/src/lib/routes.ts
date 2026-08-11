@@ -50,6 +50,8 @@ export const routes = {
   kokkaiSessionBills: (slug: string) => `/kokkai/${slug}/bills` as const,
 
   // ── 広川町議会 ────────────────────────────────────
+  // Phase 4 で定例会一覧はトップページに統合したため、/gikai は
+  // 恒久リダイレクト専用のページとして残している（内部リンクからは使わない）
   assemblyList: () => "/gikai" as const,
   generalQuestionList: (assemblyId: string) =>
     `/gikai/${assemblyId}/general-questions` as const,

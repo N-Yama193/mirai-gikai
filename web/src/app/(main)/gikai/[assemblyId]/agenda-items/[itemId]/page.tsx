@@ -3,6 +3,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layouts/container";
+import { SITE_NAME } from "@/config/site";
 import { routes } from "@/lib/routes";
 import { getAssemblyById } from "@/features/assemblies/server/loaders/get-assembly-by-id";
 import { getAgendaItemById } from "@/features/agenda-items/server/loaders/get-agenda-item-by-id";
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: `${item.title} | みらい議会`,
+    title: `${item.title} | ${SITE_NAME}`,
     description: `議案「${item.title}」（${item.item_number}）の内容です。`,
   };
 }
@@ -48,10 +49,6 @@ export default async function AgendaItemDetailPage({ params }: Props) {
         <nav className="flex items-center gap-2 text-[15px] flex-wrap">
           <Link href={routes.home()} className="text-black">
             TOP
-          </Link>
-          <ChevronRight className="h-5 w-5 text-black" />
-          <Link href={routes.assemblyList()} className="text-black">
-            定例会一覧
           </Link>
           <ChevronRight className="h-5 w-5 text-black" />
           <Link

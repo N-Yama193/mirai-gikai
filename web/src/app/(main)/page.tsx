@@ -1,97 +1,46 @@
 import { Container } from "@/components/layouts/container";
-import { About } from "@/components/top/about";
-import { ComingSoonSection } from "@/components/top/coming-soon-section";
-import { Hero } from "@/components/top/hero";
-import { TeamMirai } from "@/components/top/team-mirai";
-import { getDifficultyLevel } from "@/features/bill-difficulty/server/loaders/get-difficulty-level";
-import { BillDisclaimer } from "@/features/bills/client/components/bill-detail/bill-disclaimer";
-import { BillsByTagSection } from "@/features/bills/server/components/bills-by-tag-section";
-import { FeaturedBillSection } from "@/features/bills/server/components/featured-bill-section";
-import { PreviousSessionSection } from "@/features/bills/server/components/previous-session-section";
-import { loadHomeData } from "@/features/bills/server/loaders/load-home-data";
-import type { BillWithContent } from "@/features/bills/shared/types";
-import { HomeChatClient } from "@/features/chat/client/components/home-chat-client";
-import { CurrentDietSession } from "@/features/diet-sessions/client/components/current-diet-session";
-import { getCurrentDietSession } from "@/features/diet-sessions/server/loaders/get-current-diet-session";
-import { env } from "@/lib/env";
-import { getJapanTime } from "@/lib/utils/date";
+import { AboutThisSite } from "@/components/top/about-this-site";
+import { HirokawaHero } from "@/components/top/hirokawa-hero";
+import { AssemblyList } from "@/features/assemblies/server/components/assembly-list";
+import { LatestAssemblySection } from "@/features/assemblies/server/components/latest-assembly-section";
+import { getAssemblies } from "@/features/assemblies/server/loaders/get-assemblies";
 
 export default async function Home() {
-  const { billsByTag, featuredBills, comingSoonBills, previousSessionData } =
-    await loadHomeData();
-
-  // ゆくゆくタグ機能がマージされたらBFFに統合する
-  const [currentSession, currentDifficulty] = await Promise.all([
-    getCurrentDietSession(getJapanTime()),
-    getDifficultyLevel(),
-  ]);
-
-  const toBillChatContext = (bill: BillWithContent) => {
-    return {
-      name: `${bill.bill_content?.title}（${bill.name}）`,
-      summary: bill.bill_content?.summary,
-      tags: bill.tags?.map((tag) => tag.label) || [],
-      isFeatured: featuredBills.some((b) => b.id === bill.id),
-    };
-  };
+  // getAssemblies() は年度・回次の降順で返すため、先頭が直近の定例会になる
+  const assemblies = await getAssemblies();
+  const [latestAssembly, ...pastAssemblies] = assemblies;
 
   return (
     <>
-      <Hero />
+      <HirokawaHero />
 
-      {/* 本日の国会セクション */}
-      <CurrentDietSession session={currentSession} />
+      <Container className="py-10">
+        <div className="flex flex-col gap-14">
+          {latestAssembly ? (
+            <LatestAssemblySection assembly={latestAssembly} />
+          ) : (
+            <p className="py-12 text-center text-muted-foreground">
+              定例会・臨時会はまだ登録されていません
+            </p>
+          )}
 
-      {/* 議案一覧セクション */}
-      <Container className="">
-        <div className="py-10">
-          <main className="flex flex-col gap-16">
-            {/* 注目の法案セクション */}
-            <FeaturedBillSection bills={featuredBills} />
+          {pastAssemblies.length > 0 && (
+            <section className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1">
+                <h2 className="text-xl font-bold text-hirokawa-indigo">
+                  過去の定例会
+                </h2>
+                <p className="text-xs font-medium text-mirai-text-subtle">
+                  これまでに開催された定例会・臨時会
+                </p>
+              </div>
+              <AssemblyList assemblies={pastAssemblies} />
+            </section>
+          )}
 
-            {/* タグ別議案一覧セクション */}
-            <BillsByTagSection billsByTag={billsByTag} />
-
-            {/* Coming soonセクション */}
-            <ComingSoonSection bills={comingSoonBills} />
-          </main>
+          <AboutThisSite />
         </div>
       </Container>
-
-      {/* 前回の国会セクション（Archive） */}
-      {previousSessionData && (
-        <div className="bg-mirai-surface-muted py-10">
-          <Container>
-            <PreviousSessionSection
-              session={previousSessionData.session}
-              bills={previousSessionData.bills}
-              totalBillCount={previousSessionData.totalBillCount}
-            />
-          </Container>
-        </div>
-      )}
-
-      <Container>
-        {/* みらい議会とは セクション */}
-        <About />
-
-        {/* チームみらいについて セクション */}
-        <TeamMirai />
-
-        {/* 免責事項 */}
-        <BillDisclaimer />
-      </Container>
-
-      {/* チャット機能（CHAT_ENABLED が有効なときのみ） */}
-      {env.chat.enabled && (
-        <HomeChatClient
-          currentDifficulty={currentDifficulty}
-          bills={billsByTag
-            .flatMap((x) => x.bills)
-            .concat(featuredBills)
-            .map(toBillChatContext)}
-        />
-      )}
     </>
   );
 }

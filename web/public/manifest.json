@@ -1,24 +1,18 @@
 {
-  "name": "みらい議会",
-  "short_name": "みらい議会",
-  "description": "国会で今どんな法案が検討されているか、わかりやすく伝えるプラットフォーム",
+  "name": "みらい議会＠広川町",
+  "short_name": "みらい議会＠広川町",
+  "description": "広川町議会の定例会・議案・一般質問を、わかりやすく伝えるプラットフォーム",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F7F4F0",
-  "theme_color": "#2aa693",
+  "background_color": "#F8F7F2",
+  "theme_color": "#174A68",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icons/pwa/icon_android_192.png",
-      "sizes": "192x192",
+      "src": "/apple-icon",
+      "sizes": "180x180",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/pwa/icon_android_512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

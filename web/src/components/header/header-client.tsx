@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SITE_NAME } from "@/config/site";
 import { DifficultySelector } from "@/features/bill-difficulty/client/components/difficulty-selector";
 import type { DifficultyLevelEnum } from "@/features/bill-difficulty/shared/types";
 import { InterviewHeaderActions } from "@/features/interview-session/client/components/interview-header-actions";
@@ -31,25 +31,20 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
     <header className="px-3 fixed top-4 left-0 right-0 z-40 max-w-[1440px] mx-auto">
       <div className="rounded-2xl bg-white shadow-sm mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo / Site Title */}
+          {/* Site Title（FORK_GUIDELINES に沿い、本家のロゴ画像は使わずテキストで表示する） */}
           <div className="flex items-center">
             <Link
               href={routes.home()}
-              className="flex items-center space-x-2"
+              className="flex items-center gap-2"
               aria-label="ホーム"
             >
-              <Image
-                src="/img/logo.svg"
-                alt="みらい議会"
-                width={42}
-                height={36}
+              <span
+                className="h-6 w-1 rounded-full bg-hirokawa-blue"
+                aria-hidden="true"
               />
-              <Image
-                src="/img/service-logo.svg"
-                alt="みらい議会"
-                width={115}
-                height={21}
-              />
+              <span className="text-base font-bold text-hirokawa-indigo">
+                {SITE_NAME}
+              </span>
             </Link>
           </div>
 

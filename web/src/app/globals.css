@@ -55,7 +55,27 @@
 
   --color-gray-300: #c7c7cc;
 
+  /* --- 広川町カラーパレット（久留米絣の「藍と白の間」を基調とする） --- */
+  /* 出典: docs/Phase4_トップページ広川町化_設計仕様.md */
+
+  /* Primary */
+  --color-hirokawa-blue: #174a68;
+  --color-hirokawa-indigo: #123b52;
+  --color-kasuri-white: #f8f7f2;
+
+  /* Accent（新庁舎サイン計画のシンボルカラーに準拠） */
+  --color-hirokawa-green: #5e8060;
+  --color-hirokawa-ginkgo: #d6a92c;
+  --color-hirokawa-kiku: #d99a42;
+  --color-hirokawa-berry: #c75a61;
+  --color-hirokawa-grape: #79547d;
+  --color-hirokawa-red: #b94b4b;
+
   /* --- Mirai Design System Color Tokens --- */
+  /* NOTE: 既存コンポーネントが参照しているトークン名は維持したまま、
+     値のみ広川町パレットに差し替えている。名前を変えると
+     text-primary-accent / bg-mirai-gradient 等を使う既存画面が
+     旧テーマカラーのまま取り残されるため。 */
 
   /* Text */
   --color-mirai-text: #1f2937;
@@ -66,62 +86,62 @@
   --color-mirai-text-subtle: #666666;
   --color-mirai-text-close: #9f9b9b;
 
-  /* Surface / Background */
-  --color-mirai-surface: #f7f4f0;
-  --color-mirai-surface-light: #eeeeee;
-  --color-mirai-surface-grouped: #f2f2f7;
-  --color-mirai-surface-muted: #e5e5ea;
-  --color-mirai-surface-tag: #e8e8e8;
+  /* Surface / Background（絣白を基調に、わずかに温かみのある階調） */
+  --color-mirai-surface: #f8f7f2;
+  --color-mirai-surface-light: #f2f1ea;
+  --color-mirai-surface-grouped: #f4f3ee;
+  --color-mirai-surface-muted: #e9e7de;
+  --color-mirai-surface-tag: #e6e4db;
   --color-mirai-surface-warm: #eae6dd;
-  --color-mirai-surface-gray: #f6f6f6;
+  --color-mirai-surface-gray: #f6f5f1;
 
-  /* Border */
-  --color-mirai-border: #d2d2d2;
-  --color-mirai-border-light: #b1b1b1;
-  --color-mirai-border-muted: #bebcbc;
+  /* Border（藍をわずかに含ませたグレー） */
+  --color-mirai-border: #d3d0c6;
+  --color-mirai-border-light: #b3b0a6;
+  --color-mirai-border-muted: #c0bdb3;
 
   /* Stance semantic colors */
-  --color-stance-for-bg: #ecfcf1;
-  --color-stance-for-badge-start: #e2f6f3;
-  --color-stance-for-badge-end: #eef6e2;
-  --color-stance-against: #c9272a;
-  --color-stance-against-light: #d23c3f;
-  --color-stance-against-bg: #fff1f1;
-  --color-stance-against-badge-bg: #ffeaea;
+  --color-stance-for-bg: #eef4ed;
+  --color-stance-for-badge-start: #e4ece4;
+  --color-stance-for-badge-end: #f0f2e6;
+  --color-stance-against: #b94b4b;
+  --color-stance-against-light: #c75a61;
+  --color-stance-against-bg: #fbf2f2;
+  --color-stance-against-badge-bg: #f7e9e9;
   --color-stance-neutral: #805f34;
   --color-stance-neutral-badge-bg: #f7e8db;
 
   /* Reaction */
-  --color-mirai-reaction-active: #dd425f;
+  --color-mirai-reaction-active: #c75a61;
   --color-mirai-reaction-inactive: var(--color-mirai-text-muted);
 
   /* Accent */
-  --color-mirai-star: #ff9500;
-  --color-mirai-highlight: #f4ff5f;
-  --color-mirai-badge-yellow: #fffd96;
-  --color-mirai-info-blue: #b2d3e8;
+  --color-mirai-star: #d6a92c;
+  --color-mirai-highlight: #f0e6b8;
+  --color-mirai-badge-yellow: #f5edc9;
+  --color-mirai-info-blue: #cfdde6;
 
   /* Progress */
-  --color-mirai-progress-track: #d9d9d9;
-  --color-mirai-progress-fill: #a9e89d;
+  --color-mirai-progress-track: #dddad0;
+  --color-mirai-progress-fill: #8fa891;
 
-  /* Gradient endpoints */
-  --color-mirai-gradient-start: #64d8c6;
-  --color-mirai-gradient-end: #bcecd3;
+  /* Gradient endpoints（淡い藍→絣白。上に濃色テキストを載せるため明度を保つ） */
+  --color-mirai-gradient-start: #cfdde6;
+  --color-mirai-gradient-end: #eeece4;
 
-  /* Team Mirai brand (party design system) */
-  --color-mirai-brand-teal: #30bca7;
-  --color-mirai-brand-teal-hover: #089781;
-  --color-mirai-brand-mint: #e2f6f3;
+  /* かつてTeam Mirai brandだったトークン（広川ブルー系に差し替え済み） */
+  --color-mirai-brand-teal: #174a68;
+  --color-mirai-brand-teal-hover: #123b52;
+  --color-mirai-brand-mint: #e3eaef;
 
   /* Topic analysis */
-  --color-topic-info-bg: #e5f3f0;
-  --color-topic-chip-bg: #f1f1f1;
-  --color-topic-count: #6b7775;
+  --color-topic-info-bg: #e8eef2;
+  --color-topic-chip-bg: #f0efe9;
+  --color-topic-count: #6b7275;
   --color-topic-label: #909090;
-  --color-topic-affected: #c8642a;
-  --color-topic-industry: #2563a8;
-  --color-topic-expert: #0f8472;
+  --color-topic-affected: #d99a42;
+  --color-topic-industry: #174a68;
+  --color-topic-expert: #5e8060;
   --color-topic-citizen: #909090;
 
   /* 引用文の明朝体（Noto Serif JP） */
@@ -130,14 +150,15 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #f7f4ee;
+  --background: #f8f7f2;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #2aa693;
-  --primary-accent: #0f8472;
+  /* 広川ブルー（久留米絣の藍色）。白背景に対しコントラスト比 8.5:1 でWCAG AAAを満たす */
+  --primary: #174a68;
+  --primary-accent: #123b52;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -259,7 +280,7 @@
   }
 
   .bg-mirai-light-gradient {
-    background-image: linear-gradient(to bottom, #e2f6f3, #eef6e2);
+    background-image: linear-gradient(to bottom, #e3eaef, #f0eee7);
   }
 
   .bg-mirai-white-fade {
@@ -285,6 +306,49 @@
 
   .font-lexend {
     font-family: var(--font-lexend-giga), system-ui, sans-serif;
+  }
+
+  /* --- 絣（かすり）の線 --- */
+  /* 面（Hero背景など）は <KasuriPattern /> を使う。
+     ここでは区切り線・カード境界のような「線」だけをCSSで扱う。
+     DOM要素を増やさずに済み、線の用途では十分な表現力があるため。 */
+
+  /* 横方向の区切り線。織り目が途切れる絣の「かすれ」を破線の粗密で表現する */
+  .kasuri-divider {
+    height: 1px;
+    border: 0;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--color-hirokawa-blue) 0 6px,
+      transparent 6px 10px,
+      var(--color-hirokawa-blue) 10px 13px,
+      transparent 13px 21px,
+      var(--color-hirokawa-blue) 21px 30px,
+      transparent 30px 34px
+    );
+    opacity: 0.35;
+  }
+
+  /* カードなどの左端に絣の縦の織り目を添える */
+  .kasuri-edge {
+    position: relative;
+  }
+
+  .kasuri-edge::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 2px;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--color-hirokawa-blue) 0 7px,
+      transparent 7px 11px,
+      var(--color-hirokawa-blue) 11px 16px,
+      transparent 16px 26px
+    );
+    opacity: 0.45;
+    pointer-events: none;
   }
 }
 

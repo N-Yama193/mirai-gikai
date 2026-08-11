@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layouts/container";
+import { SITE_NAME } from "@/config/site";
 import { routes } from "@/lib/routes";
 import { getAssemblyById } from "@/features/assemblies/server/loaders/get-assembly-by-id";
 import { getGeneralQuestionsByAssembly } from "@/features/general-questions/server/loaders/get-general-questions-by-assembly";
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: `${assembly.name}の一般質問一覧 | みらい議会`,
+    title: `${assembly.name}の一般質問一覧 | ${SITE_NAME}`,
     description: `${assembly.name}（${assembly.start_date}〜${assembly.end_date}）で行われた一般質問の一覧です。`,
   };
 }
@@ -55,10 +56,6 @@ export default async function GeneralQuestionsPage({ params }: Props) {
         <nav className="flex items-center gap-2 text-[15px]">
           <Link href={routes.home()} className="text-black">
             TOP
-          </Link>
-          <ChevronRight className="h-5 w-5 text-black" />
-          <Link href={routes.assemblyList()} className="text-black">
-            定例会一覧
           </Link>
           <ChevronRight className="h-5 w-5 text-black" />
           <span className="text-black">{assembly.name}</span>
