@@ -1,0 +1,25 @@
+# 改行コードをLFに統一する。
+#
+# 背景:
+#   Windows環境では core.autocrlf=true（Git for Windows の既定）により
+#   作業ツリーがCRLFになる一方、biome.json は "lineEnding": "lf" を指定している。
+#   この不一致により `biome format --write .` を実行するたびに全ファイルが
+#   「変更あり」と判定され、無関係な差分が大量に発生していた。
+#
+# 効果:
+#   text=auto でテキストファイルを自動判別し、eol=lf で作業ツリーにも
+#   LFで書き出す。core.autocrlf の設定より .gitattributes が優先されるため、
+#   OSや個人の設定に依らず全員が同じ改行コードで作業できる。
+* text=auto eol=lf
+
+# バイナリファイルは変換の対象外にする。
+# text=auto でも自動判別されるが、誤判定を防ぐため明示しておく。
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
