@@ -36,6 +36,11 @@ export type Database = {
     Tables: {
       agenda_items: {
         Row: {
+          ai_summary: Json | null
+          ai_summary_generated_at: string | null
+          ai_summary_published_at: string | null
+          ai_summary_source_hash: string | null
+          ai_summary_status: string
           assembly_id: string
           category: string
           created_at: string
@@ -49,6 +54,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_summary?: Json | null
+          ai_summary_generated_at?: string | null
+          ai_summary_published_at?: string | null
+          ai_summary_source_hash?: string | null
+          ai_summary_status?: string
           assembly_id: string
           category: string
           created_at?: string
@@ -62,6 +72,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_summary?: Json | null
+          ai_summary_generated_at?: string | null
+          ai_summary_published_at?: string | null
+          ai_summary_source_hash?: string | null
+          ai_summary_status?: string
           assembly_id?: string
           category?: string
           created_at?: string
@@ -526,6 +541,11 @@ export type Database = {
       }
       general_questions: {
         Row: {
+          ai_summary: Json | null
+          ai_summary_generated_at: string | null
+          ai_summary_published_at: string | null
+          ai_summary_source_hash: string | null
+          ai_summary_status: string
           assembly_id: string
           council_member_id: string
           created_at: string
@@ -537,6 +557,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_summary?: Json | null
+          ai_summary_generated_at?: string | null
+          ai_summary_published_at?: string | null
+          ai_summary_source_hash?: string | null
+          ai_summary_status?: string
           assembly_id: string
           council_member_id: string
           created_at?: string
@@ -548,6 +573,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_summary?: Json | null
+          ai_summary_generated_at?: string | null
+          ai_summary_published_at?: string | null
+          ai_summary_source_hash?: string | null
+          ai_summary_status?: string
           assembly_id?: string
           council_member_id?: string
           created_at?: string

@@ -1,4 +1,8 @@
-import type { GeneralQuestionDetail as GeneralQuestionDetailType } from "../../shared/types";
+import { AiSummaryCard } from "@/components/ai-summary-card";
+import type {
+  AiSummaryContent,
+  GeneralQuestionDetail as GeneralQuestionDetailType,
+} from "../../shared/types";
 import { QuestionTopicSection } from "./question-topic-section";
 
 interface GeneralQuestionDetailProps {
@@ -8,6 +12,11 @@ interface GeneralQuestionDetailProps {
 export function GeneralQuestionDetail({
   question,
 }: GeneralQuestionDetailProps) {
+  const aiSummary =
+    question.ai_summary_status === "published"
+      ? (question.ai_summary as AiSummaryContent | null)
+      : null;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1.5">
@@ -20,6 +29,13 @@ export function GeneralQuestionDetail({
           {question.title}
         </h1>
       </div>
+
+      {aiSummary && (
+        <AiSummaryCard
+          points={aiSummary.points}
+          conclusion={aiSummary.conclusion}
+        />
+      )}
 
       <div className="flex flex-col">
         {question.topics.map((topic) => (

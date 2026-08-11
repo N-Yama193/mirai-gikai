@@ -1,7 +1,9 @@
+import { AiSummaryCard } from "@/components/ai-summary-card";
 import { formatDateWithDots } from "@/lib/utils/date";
 import type {
   AgendaItemDetail as AgendaItemDetailType,
   AgendaItemStatus,
+  AiSummaryContent,
 } from "../../shared/types";
 import { AgendaItemStatusBadge } from "./agenda-item-status-badge";
 
@@ -14,6 +16,11 @@ export function AgendaItemDetail({ item }: AgendaItemDetailProps) {
   const summary =
     item.summaries.find((s) => s.mode === "detail") ??
     item.summaries.find((s) => s.mode === "easy");
+
+  const aiSummary =
+    item.ai_summary_status === "published"
+      ? (item.ai_summary as AiSummaryContent | null)
+      : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,6 +39,13 @@ export function AgendaItemDetail({ item }: AgendaItemDetailProps) {
           {item.decided_on && ` ・ ${formatDateWithDots(item.decided_on)} 議決`}
         </span>
       </div>
+
+      {aiSummary && (
+        <AiSummaryCard
+          points={aiSummary.points}
+          conclusion={aiSummary.conclusion}
+        />
+      )}
 
       {(summary?.content ?? item.proposal_reason) && (
         <p className="text-sm leading-relaxed whitespace-pre-wrap">
