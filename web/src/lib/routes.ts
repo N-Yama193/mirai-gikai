@@ -55,4 +55,8 @@ export const routes = {
     `/gikai/${assemblyId}/general-questions` as const,
   generalQuestionDetail: (assemblyId: string, questionId: string) =>
     `/gikai/${assemblyId}/general-questions/${questionId}` as const,
+  agendaItemList: (assemblyId: string) =>
+    `/gikai/${assemblyId}/agenda-items` as const,
+  agendaItemDetail: (assemblyId: string, itemId: string) =>
+    `/gikai/${assemblyId}/agenda-items/${itemId}` as const,
 } as const;

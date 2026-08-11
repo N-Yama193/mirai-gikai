@@ -1,5 +1,5 @@
 -- purpose: 動作確認用のサンプルデータを投入する（令和6年第3回定例会 実データより一部抜粋）
--- affected: assemblies, council_members, general_questions, question_topics, minutes_documents
+-- affected: assemblies, council_members, general_questions, question_topics, minutes_documents, agenda_items
 -- notes: このファイルは開発環境の動作確認専用。本番投入時は削除するか、
 --        supabase/seed.sql に移してpnpm db:resetの対象にすること。
 
@@ -84,6 +84,42 @@ begin
     '下田議員は、三潴上陽線について、歩道未整備区間が多く、通学時に児童のすぐ横を大型車が通る危険な状況を指摘。建設課長は、歩道整備が進行中だが1区画の整備完了までに10年単位の期間がかかると答弁。',
     '建設課',
     1
+  );
+
+  insert into public.agenda_items (assembly_id, item_number, title, category, proposal_reason, status, decided_on, display_order)
+  values (
+    v_assembly_id,
+    '議案第1号',
+    '令和5年度広川町一般会計歳入歳出決算認定について',
+    '決算認定',
+    '令和5年度の一般会計歳入歳出決算について、地方自治法第233条第3項の規定により議会の認定に付するもの。',
+    '可決',
+    '2024-09-18',
+    1
+  );
+
+  insert into public.agenda_items (assembly_id, item_number, title, category, proposal_reason, status, decided_on, display_order)
+  values (
+    v_assembly_id,
+    '議案第5号',
+    '広川町税条例の一部を改正する条例について',
+    '条例の改正',
+    '地方税法の改正に伴い、町税条例の関係規定を整備する必要があるため提案するもの。',
+    '可決',
+    '2024-09-18',
+    2
+  );
+
+  insert into public.agenda_items (assembly_id, item_number, title, category, proposal_reason, status, decided_on, display_order)
+  values (
+    v_assembly_id,
+    '議案第9号',
+    '令和6年度広川町一般会計補正予算（第3号）について',
+    '補正予算',
+    '国道3号広川八女バイパス関連の道路改良事業費等について、所要の補正を行うもの。',
+    '未審議',
+    null,
+    3
   );
 
 end $$;

@@ -1,6 +1,3 @@
-import Link from "next/link";
-import type { Route } from "next";
-import { routes } from "@/lib/routes";
 import type { Assembly } from "../../shared/types";
 import { AssemblyCard } from "./assembly-card";
 
@@ -20,12 +17,7 @@ export function AssemblyList({ assemblies }: AssemblyListProps) {
   return (
     <div className="flex flex-col gap-3">
       {assemblies.map((assembly) => (
-        <Link
-          key={assembly.id}
-          href={routes.generalQuestionList(assembly.id) as Route}
-        >
-          <AssemblyCard assembly={assembly} />
-        </Link>
+        <AssemblyCard key={assembly.id} assembly={assembly} />
       ))}
     </div>
   );
