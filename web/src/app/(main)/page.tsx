@@ -13,6 +13,7 @@ import type { BillWithContent } from "@/features/bills/shared/types";
 import { HomeChatClient } from "@/features/chat/client/components/home-chat-client";
 import { CurrentDietSession } from "@/features/diet-sessions/client/components/current-diet-session";
 import { getCurrentDietSession } from "@/features/diet-sessions/server/loaders/get-current-diet-session";
+import { env } from "@/lib/env";
 import { getJapanTime } from "@/lib/utils/date";
 
 export default async function Home() {
@@ -81,14 +82,16 @@ export default async function Home() {
         <BillDisclaimer />
       </Container>
 
-      {/* チャット機能 */}
-      <HomeChatClient
-        currentDifficulty={currentDifficulty}
-        bills={billsByTag
-          .flatMap((x) => x.bills)
-          .concat(featuredBills)
-          .map(toBillChatContext)}
-      />
+      {/* チャット機能（CHAT_ENABLED が有効なときのみ） */}
+      {env.chat.enabled && (
+        <HomeChatClient
+          currentDifficulty={currentDifficulty}
+          bills={billsByTag
+            .flatMap((x) => x.bills)
+            .concat(featuredBills)
+            .map(toBillChatContext)}
+        />
+      )}
     </>
   );
 }

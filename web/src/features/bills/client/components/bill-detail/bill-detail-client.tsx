@@ -14,6 +14,8 @@ interface BillDetailClientProps {
   bill: BillWithContent;
   currentDifficulty: DifficultyLevelEnum;
   hasInterviewConfig: boolean;
+  /** CHAT_ENABLED の値。Server Component 側で判定して渡す */
+  chatEnabled: boolean;
   children: ReactNode;
 }
 
@@ -29,6 +31,7 @@ export function BillDetailClient({
   bill,
   currentDifficulty,
   hasInterviewConfig,
+  chatEnabled,
   children,
 }: BillDetailClientProps) {
   const chatButtonRef = useRef<ChatButtonRef>(null);
@@ -36,6 +39,12 @@ export function BillDetailClient({
   const handleOpenChat = (selectedText: string) => {
     chatButtonRef.current?.openWithText(selectedText);
   };
+
+  // チャット無効時はテキスト選択ツールチップごと無効化する。
+  // ChatButtonだけ消すと「AIに質問」ツールチップが出るのに押しても無反応になるため。
+  if (!chatEnabled) {
+    return <>{children}</>;
+  }
 
   return (
     <>

@@ -54,6 +54,12 @@ if (
   );
 }
 
+// AIチャット機能の有効/無効。
+// 未設定・不正値のときはOFFに倒す（設定漏れで意図しないLLM課金が走るのを防ぐため）。
+// クライアントバンドルに載せたくないので NEXT_PUBLIC_ は付けない。
+// 描画側はServer Componentで判定し、OFF時はチャットのJS自体を配信しない。
+const chatEnabled = process.env.CHAT_ENABLED === "true";
+
 export const env = {
   webUrl: process.env.NEXT_PUBLIC_WEB_URL || "http://localhost:3000",
   adminUrl: process.env.ADMIN_URL || "http://localhost:3001",
@@ -70,6 +76,7 @@ export const env = {
     promptLabel: process.env.LANGFUSE_PROMPT_LABEL || "production",
   },
   chat: {
+    enabled: chatEnabled,
     dailyUserCostLimitUsd: chatDailyUserCostLimitUsd,
     dailyTotalCostLimitUsd: chatDailyTotalCostLimitUsd,
     monthlyTotalCostLimitUsd: chatMonthlyTotalCostLimitUsd,

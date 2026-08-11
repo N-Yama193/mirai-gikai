@@ -6,6 +6,7 @@ import {
 } from "@/features/chat/server/services/handle-chat-request";
 import { chatErrorToResponse } from "@/features/chat/server/utils/chat-error-response";
 import { jsonResponse } from "@/lib/api/response";
+import { env } from "@/lib/env";
 import { registerNodeTelemetry } from "@/lib/telemetry/register";
 
 async function _mockResponse(_req: Request) {
@@ -49,6 +50,12 @@ async function _mockResponse(_req: Request) {
 }
 
 export async function POST(req: Request) {
+  // チャット機能が無効な場合は、リクエストのパースもLLM呼び出しもせず即座に拒否する。
+  // UI側でもボタンを非表示にしているが、エンドポイントを直接叩かれた場合の防波堤。
+  if (!env.chat.enabled) {
+    return jsonResponse({ error: "Chat feature is disabled" }, 503);
+  }
+
   // Vercel node環境でinstrumentationが自動で起動しない問題対応
   // 明示的にtelemetryを初期化
   await registerNodeTelemetry();
