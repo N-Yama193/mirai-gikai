@@ -1,11 +1,22 @@
-name: Migrate DB then Deploy
+# Supabase のマイグレーションを適用する。
+#
+# アプリのデプロイはこのワークフローでは行わない。
+# Vercel 標準の Git 連携（vercel.json の git.deploymentEnabled）で
+# push をトリガーに自動デプロイされるため、Deploy Hook の起動は削除した。
+#
+# 注意: Vercel のビルドとこのワークフローは push 時に並行して走るため、
+# 「マイグレーション適用 → デプロイ」の順序は保証されない。
+# 実際にはマイグレーション（数秒）の方がビルド（数分）より早く終わるが、
+# カラム削除・リネームのような破壊的変更を伴う場合は、
+# 先に手元から supabase db push で適用してから push すること。
+name: Migrate DB
 
 on:
   push:
     branches: [ main, develop ]
 
 jobs:
-  migrate-and-deploy:
+  migrate:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     steps:
@@ -38,9 +49,3 @@ jobs:
           SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID: ${{ secrets.SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID }}
           SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET: ${{ secrets.SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET }}
           ADMIN_AUTH_CALLBACK_URL: ${{ secrets.ADMIN_AUTH_CALLBACK_URL }}
-
-      # 成功したら Vercel デプロイを開始
-      - name: Trigger Vercel Deploy Hook
-        run: |
-          curl -X POST "${{ secrets.WEB_VERCEL_DEPLOY_HOOK_URL }}"
-          curl -X POST "${{ secrets.ADMIN_VERCEL_DEPLOY_HOOK_URL }}"

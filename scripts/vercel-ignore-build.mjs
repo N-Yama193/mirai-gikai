@@ -3,9 +3,8 @@
 // https://vercel.com/docs/project-configuration/vercel-json#ignorecommand
 //
 // feature ブランチは open な PR があるときだけ Preview をビルドする。
-// main / develop の git 連携ビルドは deploymentEnabled で無効化済みだが、
-// deploy.yml の Deploy Hook 経由のビルドでも ignoreCommand が評価される場合に
-// 本番 / staging のビルドを止めないよう、常に続行する。
+// main / develop は Vercel の Git 連携（vercel.json の deploymentEnabled）で
+// push をトリガーにデプロイされるため、ここでは常にビルドを続行する。
 // 判定不能なケース（環境変数欠落・GitHub API のレート制限やエラー）は
 // 安全側（ビルド続行）に倒す。
 
@@ -24,7 +23,7 @@ function skip(reason) {
 }
 
 if (branch === "main" || branch === "develop") {
-  build(`branch "${branch}" deploys via deploy hook`);
+  build(`branch "${branch}" always deploys`);
 }
 
 if (!branch || !owner || !repo) {
