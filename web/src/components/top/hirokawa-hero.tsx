@@ -39,12 +39,7 @@ export function HirokawaHero() {
       />
 
       {/* 絣の織り目。藍地に対して白い糸として乗せる */}
-      <div
-        className="pointer-events-none absolute inset-0 text-kasuri-white"
-        aria-hidden="true"
-      >
-        <KasuriPattern id="hero-kasuri" />
-      </div>
+      <KasuriPattern className="pointer-events-none absolute inset-0" />
 
       <Container className="relative py-16 md:py-24">
         {/*

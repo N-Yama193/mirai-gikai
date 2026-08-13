@@ -11,6 +11,14 @@
  *   濃・中・淡の3層に分けている。藍染めの反物が、染まりの強い糸と
  *   淡い糸が重なって奥行きを持って見えるのと同じ効果を狙っている。
  *
+ * 上下のバランスについて:
+ *   SVGの <pattern> で左上を起点にタイリングすると、コンテナ高さが
+ *   タイルサイズの倍数でない限り最下段が途中で切れ、上下の余白が食い違う
+ *   （高さ360pxのとき 上22.5px / 下1.5px と21pxもズレていた）。
+ *   そのため CSS の背景として敷き、background-position: center で
+ *   タイル格子をコンテナ中心に対して対称に配置している。
+ *   これでコンテナ高さに関わらず上下の余白が揃う。
+ *
  * 実装上の注意:
  * - 「不規則さ」に Math.random() は使わない。SSRとクライアントで異なる値になり
  *   ハイドレーション不一致を起こすため、下の固定配列で揺らぎを表現している。
@@ -18,14 +26,22 @@
  *   globals.css の .kasuri-divider / .kasuri-edge を使うこと（DOM要素を増やさないため）。
  */
 
-/** 織り目の層。手前に見える濃い糸から、奥に沈む淡い糸まで */
+const TILE_SIZE = 56;
+
+/**
+ * 織り目の層。手前に見える濃い糸から、奥に沈む淡い糸まで。
+ *
+ * 座標はタイル内のローカル値。縦糸と横糸が交差してできる「+」の帯が
+ * タイル中心（y=28）に対して対称になるよう、y=19 / 28 / 37 に配置している。
+ * これが崩れると、上記 background-position: center による上下対称も崩れる。
+ */
 type ThreadLayer = {
   /** 基準不透明度に対する倍率 */
   opacityScale: number;
   strokeWidth: number;
-  /** 縦糸 [x座標, 線の長さ, 開始位置] */
+  /** 縦糸 [x座標, 線の長さ, 開始y] */
   warp: [number, number, number][];
-  /** 横糸 [y座標, 線の長さ, 開始位置] */
+  /** 横糸 [y座標, 線の長さ, 開始x] */
   weft: [number, number, number][];
 };
 
@@ -35,25 +51,25 @@ const THREAD_LAYERS: ThreadLayer[] = [
     opacityScale: 1.4,
     strokeWidth: 1.6,
     warp: [
-      [12, 13, 14],
-      [28, 14, 2],
-      [52, 12, 1],
+      [12, 13, 25],
+      [28, 14, 13],
+      [52, 12, 12],
     ],
-    weft: [[18, 13, 6]],
+    weft: [[28, 13, 6]],
   },
   // 中間層
   {
     opacityScale: 0.93,
     strokeWidth: 1.2,
     warp: [
-      [4, 11, 0],
-      [20, 9, 8],
-      [36, 11, 12],
-      [44, 7, 14],
+      [4, 11, 11],
+      [20, 9, 19],
+      [36, 11, 23],
+      [44, 7, 25],
     ],
     weft: [
-      [38, 8, 4],
-      [48, 11, 9],
+      [49, 8, 4],
+      [3, 11, 9],
     ],
   },
   // 淡い層（奥に沈む織り目）
@@ -61,104 +77,74 @@ const THREAD_LAYERS: ThreadLayer[] = [
     opacityScale: 0.53,
     strokeWidth: 0.95,
     warp: [
-      [4, 6, 15],
-      [12, 7, 3],
-      [20, 5, 0],
-      [20, 4, 21],
-      [28, 6, 19],
-      [36, 8, 0],
-      [44, 5, 5],
-      [44, 3, 24],
-      [52, 8, 16],
+      [4, 6, 26],
+      [12, 7, 14],
+      [20, 5, 11],
+      [20, 4, 32],
+      [28, 6, 30],
+      [36, 8, 11],
+      [44, 5, 16],
+      [44, 3, 35],
+      [52, 8, 27],
     ],
     weft: [
-      [8, 9, 2],
-      [8, 5, 16],
-      [26, 6, 0],
-      [26, 10, 11],
-      [38, 5, 18],
+      [19, 9, 2],
+      [19, 5, 16],
+      [37, 6, 0],
+      [37, 10, 11],
+      [49, 5, 18],
     ],
   },
 ];
 
-const TILE_SIZE = 56;
+/** 1タイルぶんのSVGを組み立てる（CSSのbackground-imageに埋め込むため文字列で返す） */
+function buildTileSvg(color: string, opacity: number): string {
+  const groups = THREAD_LAYERS.map((layer) => {
+    const lines = [
+      ...layer.warp.map(
+        ([x, length, start]) =>
+          `<line x1="${x}" y1="${start}" x2="${x}" y2="${start + length}"/>`
+      ),
+      ...layer.weft.map(
+        ([y, length, start]) =>
+          `<line x1="${start}" y1="${y}" x2="${start + length}" y2="${y}"/>`
+      ),
+    ].join("");
+    return `<g stroke="${color}" stroke-width="${layer.strokeWidth}" stroke-linecap="butt" opacity="${(opacity * layer.opacityScale).toFixed(3)}">${lines}</g>`;
+  }).join("");
 
-/**
- * タイル内で織り目を縦方向中央に寄せるためのオフセット。
- *
- * 縦糸（WARP）は y=0〜27 に収まっており、56px のタイルに対して
- * 上端0px・下端29pxと上に寄っていた。その結果、縦糸と横糸が交差する
- * 「+」の形もタイル上半分（y=8,18,26）だけに現れ、下半分（y=38,48）には
- * 交点が無く、上下のバランスが崩れて見えていた。
- *
- * (TILE_SIZE - 縦糸の高さ) / 2 = (56 - 27) / 2 = 14.5 だけ下げると
- * 上端・下端とも 14.5px となり均等になる。
- * 内容ではなくタイリング自体をずらす（patternTransform）ことで、
- * タイル境界での見切れを起こさずに全体を移動できる。
- */
-const PATTERN_Y_OFFSET = 14.5;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE_SIZE}" height="${TILE_SIZE}" viewBox="0 0 ${TILE_SIZE} ${TILE_SIZE}">${groups}</svg>`;
+}
 
 interface KasuriPatternProps {
-  /** パターンのID。同一ページに複数置く場合は衝突しないよう変える */
-  id?: string;
+  /**
+   * 糸の色。CSSのbackground-imageに埋め込む都合で currentColor は使えないため、
+   * 呼び出し側から具体的な色を渡す。既定は藍地に映える絣白。
+   */
+  color?: string;
   /** 濃い層の不透明度。中間層・淡い層はこれを基準に按分される */
   opacity?: number;
   className?: string;
 }
 
 export function KasuriPattern({
-  id = "kasuri",
+  color = "#f8f7f2",
   opacity = 0.27,
   className,
 }: KasuriPatternProps) {
+  const tile = encodeURIComponent(buildTileSvg(color, opacity));
+
   return (
-    <svg
+    <div
       className={className}
-      width="100%"
-      height="100%"
       aria-hidden="true"
-      focusable="false"
-    >
-      <title>絣模様の装飾</title>
-      <defs>
-        <pattern
-          id={id}
-          width={TILE_SIZE}
-          height={TILE_SIZE}
-          patternUnits="userSpaceOnUse"
-          patternTransform={`translate(0, ${PATTERN_Y_OFFSET})`}
-        >
-          {THREAD_LAYERS.map((layer) => (
-            <g
-              key={layer.strokeWidth}
-              stroke="currentColor"
-              strokeWidth={layer.strokeWidth}
-              strokeLinecap="butt"
-              opacity={opacity * layer.opacityScale}
-            >
-              {layer.warp.map(([x, length, start]) => (
-                <line
-                  key={`warp-${x}-${start}`}
-                  x1={x}
-                  y1={start}
-                  x2={x}
-                  y2={start + length}
-                />
-              ))}
-              {layer.weft.map(([y, length, start]) => (
-                <line
-                  key={`weft-${y}-${start}`}
-                  x1={start}
-                  y1={y}
-                  x2={start + length}
-                  y2={y}
-                />
-              ))}
-            </g>
-          ))}
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#${id})`} />
-    </svg>
+      style={{
+        backgroundImage: `url("data:image/svg+xml,${tile}")`,
+        backgroundRepeat: "repeat",
+        // タイル格子をコンテナ中心に対して対称に置き、上下の余白を揃える
+        backgroundPosition: "center",
+        backgroundSize: `${TILE_SIZE}px ${TILE_SIZE}px`,
+      }}
+    />
   );
 }
