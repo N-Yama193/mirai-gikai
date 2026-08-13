@@ -83,6 +83,21 @@ const THREAD_LAYERS: ThreadLayer[] = [
 
 const TILE_SIZE = 56;
 
+/**
+ * タイル内で織り目を縦方向中央に寄せるためのオフセット。
+ *
+ * 縦糸（WARP）は y=0〜27 に収まっており、56px のタイルに対して
+ * 上端0px・下端29pxと上に寄っていた。その結果、縦糸と横糸が交差する
+ * 「+」の形もタイル上半分（y=8,18,26）だけに現れ、下半分（y=38,48）には
+ * 交点が無く、上下のバランスが崩れて見えていた。
+ *
+ * (TILE_SIZE - 縦糸の高さ) / 2 = (56 - 27) / 2 = 14.5 だけ下げると
+ * 上端・下端とも 14.5px となり均等になる。
+ * 内容ではなくタイリング自体をずらす（patternTransform）ことで、
+ * タイル境界での見切れを起こさずに全体を移動できる。
+ */
+const PATTERN_Y_OFFSET = 14.5;
+
 interface KasuriPatternProps {
   /** パターンのID。同一ページに複数置く場合は衝突しないよう変える */
   id?: string;
@@ -93,7 +108,7 @@ interface KasuriPatternProps {
 
 export function KasuriPattern({
   id = "kasuri",
-  opacity = 0.3,
+  opacity = 0.27,
   className,
 }: KasuriPatternProps) {
   return (
@@ -111,6 +126,7 @@ export function KasuriPattern({
           width={TILE_SIZE}
           height={TILE_SIZE}
           patternUnits="userSpaceOnUse"
+          patternTransform={`translate(0, ${PATTERN_Y_OFFSET})`}
         >
           {THREAD_LAYERS.map((layer) => (
             <g

@@ -7,58 +7,63 @@ import { SITE_NAME } from "@/config/site";
  *
  * FORK_GUIDELINES.md に沿い、本家（チームみらい）のロゴ・ヒーロー画像は使わない。
  * 画像素材を持ち込まず、サービス名のテキストと絣パターンだけで構成している。
+ *
+ * 配色の考え方:
+ *   久留米絣は「藍地に白い絣糸」なので、深い紺をベースに白い織り目を乗せる。
+ *   淡い水色（浅葱・空）は背景ではなく、文字色と光の陰影に使う。
  */
 export function HirokawaHero() {
   return (
-    <div className="relative overflow-hidden bg-mirai-surface">
+    <div className="relative overflow-hidden bg-hirokawa-indigo">
+      {/* 藍のベース。上を広川藍、下へ向かって絣藍まで深く沈める */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            "linear-gradient(165deg, var(--color-hirokawa-blue) 0%, #143f59 52%, var(--color-hirokawa-indigo) 100%)",
+        }}
+      />
       {/*
-        藍の濃淡。藍染めの反物が淡い水色から深い藍まで層になって見える表情を、
-        2枚のグラデーションを重ねて再現する。
-        1枚目は上から下へ抜ける縦のグラデーション、
-        2枚目は左上から沈み込む藍のにじみ。
+        布に当たる光の陰影。
+        テキストは左寄せなので、あえて逆側の右上に置いて重ならないようにしている
+        （重なるとコントラスト比が AAA を下回るため。詳細は下のテキスト色のコメント）。
       */}
       <div
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           backgroundImage:
-            "linear-gradient(170deg, var(--color-hirokawa-asagi) 0%, var(--color-hirokawa-mizu) 30%, var(--color-hirokawa-sora) 58%, var(--color-kasuri-white) 100%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            "radial-gradient(120% 90% at 8% -10%, rgba(23, 74, 104, 0.28) 0%, rgba(23, 74, 104, 0) 62%)",
+            "radial-gradient(100% 72% at 84% -6%, rgba(169, 198, 216, 0.12) 0%, rgba(169, 198, 216, 0) 60%)",
         }}
       />
 
-      {/* 絣の織り目。装飾なので currentColor 経由で藍色を乗せる */}
+      {/* 絣の織り目。藍地に対して白い糸として乗せる */}
       <div
-        className="pointer-events-none absolute inset-0 text-hirokawa-blue"
+        className="pointer-events-none absolute inset-0 text-kasuri-white"
         aria-hidden="true"
       >
         <KasuriPattern id="hero-kasuri" />
       </div>
 
       <Container className="relative py-16 md:py-24">
-        {/* 小さい文字なので、藍がかった背景でもAAAを満たす最も濃い藍を使う */}
-        <p className="text-sm font-bold text-hirokawa-sumi">
+        {/*
+          文字色は藍地に対する明色。最も明るい背景（光の陰影が乗った広川藍）でも
+          WCAG AAA を満たす組み合わせを選んでいる。
+        */}
+        <p className="text-sm font-bold text-hirokawa-sora">
           広川町議会 会議録アーカイブ
         </p>
 
-        <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-hirokawa-indigo md:text-4xl">
+        <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-kasuri-white md:text-4xl">
           {SITE_NAME}
         </h1>
 
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-mirai-text md:text-lg">
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-hirokawa-sora md:text-lg">
           広川町議会でいま何が議論されているのかを、
           <br className="hidden sm:block" />
           わかりやすく伝えます。
         </p>
-
-        <hr className="kasuri-divider mt-8 max-w-xs" />
       </Container>
     </div>
   );

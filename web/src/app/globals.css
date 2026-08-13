@@ -64,17 +64,11 @@
   --color-kasuri-white: #f8f7f2;
 
   /* 藍の濃淡（絣白から広川藍へ至る中間色）。
-     藍染めの反物が淡い水色から深い藍まで層になって見える表情を、
-     Heroの背景グラデーションなどで再現するために使う。 */
+     Heroは藍地に白い絣糸という久留米絣の構造をとるため、
+     これらは背景ではなく「藍地に乗せる文字色」と「布に当たる光の陰影」に使う。 */
   --color-hirokawa-sora: #e3ebef;
   --color-hirokawa-mizu: #cadeea;
   --color-hirokawa-asagi: #a9c6d8;
-
-  /* 藍がかった背景の上に小さな文字を置くための最も濃い藍。
-     Heroのグラデーション上では --color-hirokawa-indigo (#123b52) だと
-     コントラスト比が 6.95 となり WCAG AAA (7:1) をわずかに下回るため、
-     14px程度の小さな文字にはこちらを使う（同条件で 7.74）。 */
-  --color-hirokawa-sumi: #103349;
 
   /* Accent（新庁舎サイン計画のシンボルカラーに準拠） */
   --color-hirokawa-green: #5e8060;
