@@ -6,12 +6,19 @@ import { isInterviewSection, isMainPage } from "@/lib/page-layout-utils";
 import { cn } from "@/lib/utils";
 
 interface MainLayoutProps {
+  /**
+   * CHAT_ENABLED の値。Server Component 側で判定して渡す。
+   * チャットサイドバー用の右オフセットを出すかどうかの判定に使う。
+   */
+  chatEnabled: boolean;
   children: ReactNode;
 }
 
-export function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout({ chatEnabled, children }: MainLayoutProps) {
   const pathname = usePathname();
-  const useSidebarLayout = isMainPage(pathname);
+  // チャットが無効なときにオフセットを付けると、描画されないサイドバーのために
+  // 右側に500pxの空白が残ってしまうため、チャットが有効なときだけ適用する
+  const useSidebarLayout = isMainPage(pathname) && chatEnabled;
   const isInterview = isInterviewSection(pathname);
 
   return (

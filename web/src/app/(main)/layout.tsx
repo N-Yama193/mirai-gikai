@@ -20,7 +20,7 @@ export default function MainGroupLayout({
       <RubyfulInitializer />
       <AuthGate />
 
-      <MainLayout>
+      <MainLayout chatEnabled={env.chat.enabled}>
         <Header />
         <main className="min-h-dvh md:min-h-[calc(100dvh-96px)] bg-mirai-surface">
           {children}

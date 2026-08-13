@@ -11,7 +11,30 @@ import { SITE_NAME } from "@/config/site";
 export function HirokawaHero() {
   return (
     <div className="relative overflow-hidden bg-mirai-surface">
-      {/* 絣の織り目。装飾なので currentColor 経由で藍色を薄く乗せる */}
+      {/*
+        藍の濃淡。藍染めの反物が淡い水色から深い藍まで層になって見える表情を、
+        2枚のグラデーションを重ねて再現する。
+        1枚目は上から下へ抜ける縦のグラデーション、
+        2枚目は左上から沈み込む藍のにじみ。
+      */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            "linear-gradient(170deg, var(--color-hirokawa-asagi) 0%, var(--color-hirokawa-mizu) 30%, var(--color-hirokawa-sora) 58%, var(--color-kasuri-white) 100%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            "radial-gradient(120% 90% at 8% -10%, rgba(23, 74, 104, 0.28) 0%, rgba(23, 74, 104, 0) 62%)",
+        }}
+      />
+
+      {/* 絣の織り目。装飾なので currentColor 経由で藍色を乗せる */}
       <div
         className="pointer-events-none absolute inset-0 text-hirokawa-blue"
         aria-hidden="true"
@@ -20,7 +43,8 @@ export function HirokawaHero() {
       </div>
 
       <Container className="relative py-16 md:py-24">
-        <p className="text-sm font-bold text-primary-accent">
+        {/* 小さい文字なので、藍がかった背景でもAAAを満たす最も濃い藍を使う */}
+        <p className="text-sm font-bold text-hirokawa-sumi">
           広川町議会 会議録アーカイブ
         </p>
 
