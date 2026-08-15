@@ -13,7 +13,7 @@ interface AssemblyCardProps {
 
 export function AssemblyCard({ assembly }: AssemblyCardProps) {
   return (
-    <Card className="border border-black">
+    <Card className="rounded-3xl border-[0.5px] border-mirai-border-light">
       <CardHeader>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
@@ -23,7 +23,7 @@ export function AssemblyCard({ assembly }: AssemblyCardProps) {
               {formatDateWithDots(assembly.end_date)}
             </span>
           </div>
-          <CardTitle className="text-2xl/8 tracking-normal">
+          <CardTitle className="text-[22px]/8 tracking-normal">
             {assembly.name}
           </CardTitle>
           {assembly.total_agenda_items != null && (
@@ -32,14 +32,14 @@ export function AssemblyCard({ assembly }: AssemblyCardProps) {
             </span>
           )}
           <div className="flex flex-wrap gap-3 pt-1">
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="lg" asChild>
               <Link href={routes.agendaItemList(assembly.id) as Route}>
-                議案一覧
+                議案を見る
               </Link>
             </Button>
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="lg" asChild>
               <Link href={routes.generalQuestionList(assembly.id) as Route}>
-                一般質問一覧
+                一般質問を見る
               </Link>
             </Button>
           </div>

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Header } from "@/components/header";
 import { AuthGate } from "@/components/layouts/auth-gate";
 import { Footer } from "@/components/layouts/footer/footer";
+import { MainContentArea } from "@/components/layouts/main-content-area";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { env } from "@/lib/env";
 import { RubyfulInitializer } from "@/lib/rubyful";
@@ -22,9 +23,7 @@ export default function MainGroupLayout({
 
       <MainLayout chatEnabled={env.chat.enabled}>
         <Header />
-        <main className="min-h-dvh md:min-h-[calc(100dvh-96px)] bg-mirai-surface">
-          {children}
-        </main>
+        <MainContentArea>{children}</MainContentArea>
         <Footer />
       </MainLayout>
     </>

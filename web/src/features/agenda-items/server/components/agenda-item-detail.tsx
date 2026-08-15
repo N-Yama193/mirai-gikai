@@ -17,9 +17,14 @@ export function AgendaItemDetail({ item }: AgendaItemDetailProps) {
     item.summaries.find((s) => s.mode === "detail") ??
     item.summaries.find((s) => s.mode === "easy");
 
-  const aiSummary =
+  const rawAiSummary =
     item.ai_summary_status === "published"
       ? (item.ai_summary as AiSummaryContent | null)
+      : null;
+  // 論点・結論のどちらも空の場合はラベルだけの空箱になるため表示しない
+  const aiSummary =
+    rawAiSummary && (rawAiSummary.points.length > 0 || rawAiSummary.conclusion)
+      ? rawAiSummary
       : null;
 
   return (

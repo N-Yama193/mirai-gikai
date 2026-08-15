@@ -18,8 +18,12 @@ export function LatestAssemblySection({
   assembly,
 }: LatestAssemblySectionProps) {
   return (
-    <section className="kasuri-edge rounded-2xl border border-mirai-border bg-white p-6 pl-8 md:p-8 md:pl-10">
+    <section className="rounded-3xl border border-[#eee] bg-white p-6 shadow-[7px_9px_18px_rgba(23,74,104,0.28)] md:p-8">
       <div className="flex flex-col gap-4">
+        <Badge className="w-fit rounded-full border-transparent bg-hirokawa-blue text-kasuri-white">
+          最新の定例会
+        </Badge>
+
         <div className="flex flex-wrap items-center gap-3">
           <Badge variant="outline">{assembly.session_type}</Badge>
           <span className="text-xs font-medium text-muted-foreground">
