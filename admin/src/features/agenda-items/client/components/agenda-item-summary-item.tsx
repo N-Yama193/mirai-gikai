@@ -77,9 +77,11 @@ export function AgendaItemSummaryItem({ item }: AgendaItemSummaryItemProps) {
           {item.ai_summary && (
             <div className="mt-2 text-sm text-gray-600">
               <ul className="list-disc list-inside">
-                {item.ai_summary.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
+                {item.ai_summary.points
+                  .filter((point) => point.trim().length > 0)
+                  .map((point, index) => (
+                    <li key={`${item.id}-${index}`}>{point}</li>
+                  ))}
               </ul>
               <p className="mt-1">{item.ai_summary.conclusion}</p>
             </div>

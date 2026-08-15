@@ -27,6 +27,15 @@ export async function generateGeneralQuestionSummaryCore(
     throw new Error("一般質問が見つかりません");
   }
 
+  if (
+    question.topics.length === 0 ||
+    question.topics.every((t) => !t.raw_excerpt.trim())
+  ) {
+    throw new Error(
+      "論点(question_topics)が未登録のため、AI要約を生成できません。先に論点を登録してください。"
+    );
+  }
+
   const sourceText = buildSourceText(question.title, question.topics);
   const sourceHash = hashContent(sourceText);
 

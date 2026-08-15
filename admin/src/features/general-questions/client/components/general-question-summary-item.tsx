@@ -87,9 +87,11 @@ export function GeneralQuestionSummaryItem({
           {question.ai_summary && (
             <div className="mt-2 text-sm text-gray-600">
               <ul className="list-disc list-inside">
-                {question.ai_summary.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
+                {question.ai_summary.points
+                  .filter((point) => point.trim().length > 0)
+                  .map((point, index) => (
+                    <li key={`${question.id}-${index}`}>{point}</li>
+                  ))}
               </ul>
               <p className="mt-1">{question.ai_summary.conclusion}</p>
             </div>

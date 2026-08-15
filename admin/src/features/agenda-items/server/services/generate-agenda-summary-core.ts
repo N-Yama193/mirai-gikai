@@ -25,6 +25,12 @@ export async function generateAgendaSummaryCore(id: string): Promise<void> {
     throw new Error("議案が見つかりません");
   }
 
+  if (!item.proposal_reason?.trim()) {
+    throw new Error(
+      "提案理由が未入力のため、AI要約を生成できません。先に議案データに提案理由を登録してください。"
+    );
+  }
+
   const sourceText = buildSourceText(item.title, item.proposal_reason);
   const sourceHash = hashContent(sourceText);
 
