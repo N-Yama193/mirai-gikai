@@ -25,6 +25,8 @@ export async function findAllGeneralQuestionsForSummary(): Promise<
       ai_summary_generated_at,
       ai_summary_published_at,
       ai_summary_source_hash,
+      policy_tags,
+      is_featured,
       question_topics ( raw_excerpt )
     `
     )
@@ -96,6 +98,32 @@ export async function saveGeneralQuestionSummary(
     throw new Error(
       `Failed to save general question summary: ${error.message}`
     );
+  }
+}
+
+/**
+ * 一般質問のテーマ別タグ(policy_tags)と注目フラグ(is_featured)を更新する
+ * （管理者による手動設定。AI要約とは独立した項目）
+ */
+export async function updateGeneralQuestionTags(
+  id: string,
+  input: {
+    policyTags: string[];
+    isFeatured: boolean;
+  }
+): Promise<void> {
+  const supabase = createAdminClient();
+
+  const { error } = await supabase
+    .from("general_questions")
+    .update({
+      policy_tags: input.policyTags,
+      is_featured: input.isFeatured,
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Failed to update general question tags: ${error.message}`);
   }
 }
 

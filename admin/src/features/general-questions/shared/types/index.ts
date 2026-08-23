@@ -15,6 +15,8 @@ export type GeneralQuestionSummaryRow = {
   ai_summary_generated_at: string | null;
   ai_summary_published_at: string | null;
   ai_summary_source_hash: string | null;
+  policy_tags: string[];
+  is_featured: boolean;
 };
 
 export type GeneralQuestionSummaryListRow = GeneralQuestionSummaryRow & {

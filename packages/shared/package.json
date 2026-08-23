@@ -8,6 +8,10 @@
     "test:watch": "vitest"
   },
   "exports": {
+    "./policy-tags": {
+      "types": "./src/policy-tags.ts",
+      "default": "./src/policy-tags.ts"
+    },
     "./ai/models": {
       "types": "./src/ai/models.ts",
       "default": "./src/ai/models.ts"

@@ -47,7 +47,9 @@ export type Database = {
           decided_on: string | null
           display_order: number
           id: string
+          is_featured: boolean
           item_number: string
+          policy_tags: string[]
           proposal_reason: string | null
           status: string
           title: string
@@ -65,7 +67,9 @@ export type Database = {
           decided_on?: string | null
           display_order?: number
           id?: string
+          is_featured?: boolean
           item_number: string
+          policy_tags?: string[]
           proposal_reason?: string | null
           status?: string
           title: string
@@ -83,7 +87,9 @@ export type Database = {
           decided_on?: string | null
           display_order?: number
           id?: string
+          is_featured?: boolean
           item_number?: string
+          policy_tags?: string[]
           proposal_reason?: string | null
           status?: string
           title?: string
@@ -550,9 +556,11 @@ export type Database = {
           council_member_id: string
           created_at: string
           id: string
+          is_featured: boolean
           order_number: number
           page_end: number | null
           page_start: number | null
+          policy_tags: string[]
           title: string
           updated_at: string
         }
@@ -566,9 +574,11 @@ export type Database = {
           council_member_id: string
           created_at?: string
           id?: string
+          is_featured?: boolean
           order_number: number
           page_end?: number | null
           page_start?: number | null
+          policy_tags?: string[]
           title: string
           updated_at?: string
         }
@@ -582,9 +592,11 @@ export type Database = {
           council_member_id?: string
           created_at?: string
           id?: string
+          is_featured?: boolean
           order_number?: number
           page_end?: number | null
           page_start?: number | null
+          policy_tags?: string[]
           title?: string
           updated_at?: string
         }

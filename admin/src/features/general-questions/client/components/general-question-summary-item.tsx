@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { PolicyTagEditor } from "@/components/policy-tag-editor";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { generateGeneralQuestionSummary } from "../../server/actions/generate-general-question-summary";
 import { publishGeneralQuestionSummary } from "../../server/actions/publish-general-question-summary";
+import { updateGeneralQuestionTags } from "../../server/actions/update-general-question-tags";
 import type { GeneralQuestionSummaryListRow } from "../../shared/types";
 
 type GeneralQuestionSummaryItemProps = {
@@ -114,6 +116,19 @@ export function GeneralQuestionSummaryItem({
           )}
         </div>
       </div>
+
+      <PolicyTagEditor
+        idPrefix={question.id}
+        initialTags={question.policy_tags}
+        initialFeatured={question.is_featured}
+        onSave={({ policyTags, isFeatured }) =>
+          updateGeneralQuestionTags({
+            id: question.id,
+            policyTags,
+            isFeatured,
+          })
+        }
+      />
     </div>
   );
 }

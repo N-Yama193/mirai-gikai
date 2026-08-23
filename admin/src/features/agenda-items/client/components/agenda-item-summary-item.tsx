@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { PolicyTagEditor } from "@/components/policy-tag-editor";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { generateAgendaSummary } from "../../server/actions/generate-agenda-summary";
 import { publishAgendaSummary } from "../../server/actions/publish-agenda-summary";
+import { updateAgendaItemTags } from "../../server/actions/update-agenda-item-tags";
 import type { AgendaItemSummaryListRow } from "../../shared/types";
 
 type AgendaItemSummaryItemProps = {
@@ -104,6 +106,15 @@ export function AgendaItemSummaryItem({ item }: AgendaItemSummaryItemProps) {
           )}
         </div>
       </div>
+
+      <PolicyTagEditor
+        idPrefix={item.id}
+        initialTags={item.policy_tags}
+        initialFeatured={item.is_featured}
+        onSave={({ policyTags, isFeatured }) =>
+          updateAgendaItemTags({ id: item.id, policyTags, isFeatured })
+        }
+      />
     </div>
   );
 }

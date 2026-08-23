@@ -16,7 +16,7 @@ export async function findAllAgendaItemsForSummary(): Promise<
   const { data, error } = await supabase
     .from("agenda_items")
     .select(
-      "id, item_number, title, proposal_reason, ai_summary, ai_summary_status, ai_summary_generated_at, ai_summary_published_at, ai_summary_source_hash"
+      "id, item_number, title, proposal_reason, ai_summary, ai_summary_status, ai_summary_generated_at, ai_summary_published_at, ai_summary_source_hash, policy_tags, is_featured"
     )
     .order("display_order", { ascending: true });
 
@@ -82,6 +82,32 @@ export async function saveAgendaItemSummary(
 
   if (error) {
     throw new Error(`Failed to save agenda item summary: ${error.message}`);
+  }
+}
+
+/**
+ * 議案のテーマ別タグ(policy_tags)と注目フラグ(is_featured)を更新する
+ * （管理者による手動設定。AI要約とは独立した項目）
+ */
+export async function updateAgendaItemTags(
+  id: string,
+  input: {
+    policyTags: string[];
+    isFeatured: boolean;
+  }
+): Promise<void> {
+  const supabase = createAdminClient();
+
+  const { error } = await supabase
+    .from("agenda_items")
+    .update({
+      policy_tags: input.policyTags,
+      is_featured: input.isFeatured,
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Failed to update agenda item tags: ${error.message}`);
   }
 }
 
