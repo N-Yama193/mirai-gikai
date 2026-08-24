@@ -27,19 +27,21 @@ export function GeneralQuestionCard({ question }: GeneralQuestionCardProps) {
               {question.order_number}番 {question.council_member.name}議員
             </span>
           </div>
-          <PolicyTagBadgeList tags={question.policy_tags} />
           <CardTitle className="text-xl/7 tracking-normal">
             {question.title}
           </CardTitle>
         </div>
       </CardHeader>
-      {conclusion && (
-        <CardContent>
-          <RubySafeLineClamp
-            text={conclusion}
-            lineClamp={2}
-            className="text-sm text-muted-foreground"
-          />
+      {(conclusion || question.policy_tags?.length > 0) && (
+        <CardContent className="flex flex-col gap-2">
+          {conclusion && (
+            <RubySafeLineClamp
+              text={conclusion}
+              lineClamp={2}
+              className="text-sm text-muted-foreground"
+            />
+          )}
+          <PolicyTagBadgeList tags={question.policy_tags} />
         </CardContent>
       )}
     </Card>
