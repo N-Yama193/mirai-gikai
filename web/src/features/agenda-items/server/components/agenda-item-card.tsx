@@ -29,7 +29,6 @@ export function AgendaItemCard({ item }: AgendaItemCardProps) {
             <Badge variant="outline">{item.category}</Badge>
             <AgendaItemStatusBadge status={item.status as AgendaItemStatus} />
           </div>
-          <PolicyTagBadgeList tags={item.policy_tags} />
           <span className="text-xs font-medium text-muted-foreground">
             {item.item_number}
           </span>
@@ -38,13 +37,16 @@ export function AgendaItemCard({ item }: AgendaItemCardProps) {
           </CardTitle>
         </div>
       </CardHeader>
-      {conclusion && (
-        <CardContent>
-          <RubySafeLineClamp
-            text={conclusion}
-            lineClamp={2}
-            className="text-sm text-muted-foreground"
-          />
+      {(conclusion || item.policy_tags?.length > 0) && (
+        <CardContent className="flex flex-col gap-2">
+          {conclusion && (
+            <RubySafeLineClamp
+              text={conclusion}
+              lineClamp={2}
+              className="text-sm text-muted-foreground"
+            />
+          )}
+          <PolicyTagBadgeList tags={item.policy_tags} />
         </CardContent>
       )}
     </Card>
