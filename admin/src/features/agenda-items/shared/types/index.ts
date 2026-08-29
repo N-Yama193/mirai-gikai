@@ -5,6 +5,12 @@ export type AiSummaryContent = {
   conclusion: string;
 };
 
+export type AssemblySummaryInfo = {
+  id: string;
+  name: string;
+  start_date: string;
+};
+
 export type AgendaItemSummaryRow = {
   id: string;
   item_number: string;
@@ -17,6 +23,8 @@ export type AgendaItemSummaryRow = {
   ai_summary_source_hash: string | null;
   policy_tags: string[];
   is_featured: boolean;
+  /** 所属する定例会・臨時会（一覧画面での議会別グループ表示に使用） */
+  assembly: AssemblySummaryInfo;
 };
 
 export type AgendaItemSummaryListRow = AgendaItemSummaryRow & {

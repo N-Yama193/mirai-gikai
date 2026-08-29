@@ -27,9 +27,11 @@ export async function findAllGeneralQuestionsForSummary(): Promise<
       ai_summary_source_hash,
       policy_tags,
       is_featured,
-      question_topics ( raw_excerpt )
+      question_topics ( raw_excerpt ),
+      assemblies ( id, name, start_date )
     `
     )
+    .order("start_date", { referencedTable: "assemblies", ascending: false })
     .order("order_number", { ascending: true });
 
   if (error) {
@@ -37,13 +39,17 @@ export async function findAllGeneralQuestionsForSummary(): Promise<
     return [];
   }
 
-  return data.map((question) => ({
-    ...question,
-    topics: question.question_topics,
-    ai_summary: question.ai_summary as AiSummaryContent | null,
-    ai_summary_status:
-      question.ai_summary_status as GeneralQuestionSummaryRow["ai_summary_status"],
-  }));
+  return data.map((question) => {
+    const { question_topics, assemblies, ...rest } = question;
+    return {
+      ...rest,
+      topics: question_topics,
+      ai_summary: question.ai_summary as AiSummaryContent | null,
+      ai_summary_status:
+        question.ai_summary_status as GeneralQuestionSummaryRow["ai_summary_status"],
+      assembly: assemblies as GeneralQuestionSummaryRow["assembly"],
+    };
+  });
 }
 
 /**

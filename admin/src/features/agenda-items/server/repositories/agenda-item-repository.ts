@@ -16,8 +16,9 @@ export async function findAllAgendaItemsForSummary(): Promise<
   const { data, error } = await supabase
     .from("agenda_items")
     .select(
-      "id, item_number, title, proposal_reason, ai_summary, ai_summary_status, ai_summary_generated_at, ai_summary_published_at, ai_summary_source_hash, policy_tags, is_featured"
+      "id, item_number, title, proposal_reason, ai_summary, ai_summary_status, ai_summary_generated_at, ai_summary_published_at, ai_summary_source_hash, policy_tags, is_featured, assemblies ( id, name, start_date )"
     )
+    .order("start_date", { referencedTable: "assemblies", ascending: false })
     .order("display_order", { ascending: true });
 
   if (error) {
@@ -25,12 +26,16 @@ export async function findAllAgendaItemsForSummary(): Promise<
     return [];
   }
 
-  return data.map((item) => ({
-    ...item,
-    ai_summary: item.ai_summary as AiSummaryContent | null,
-    ai_summary_status:
-      item.ai_summary_status as AgendaItemSummaryRow["ai_summary_status"],
-  }));
+  return data.map((item) => {
+    const { assemblies, ...rest } = item;
+    return {
+      ...rest,
+      ai_summary: item.ai_summary as AiSummaryContent | null,
+      ai_summary_status:
+        item.ai_summary_status as AgendaItemSummaryRow["ai_summary_status"],
+      assembly: assemblies as AgendaItemSummaryRow["assembly"],
+    };
+  });
 }
 
 /**
