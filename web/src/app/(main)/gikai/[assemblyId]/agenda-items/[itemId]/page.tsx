@@ -40,8 +40,8 @@ export default async function AgendaItemDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-mirai-surface-muted">
-      <Container className="py-8">
+    <div className="bg-mirai-surface-muted pt-24 md:pt-0">
+      <Container className="pb-8 md:py-8">
         <AgendaItemDetail item={item} />
       </Container>
 

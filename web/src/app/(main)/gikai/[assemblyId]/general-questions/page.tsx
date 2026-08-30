@@ -37,8 +37,8 @@ export default async function GeneralQuestionsPage({ params }: Props) {
   const questions = await getGeneralQuestionsByAssembly(assembly.id);
 
   return (
-    <div className="bg-mirai-surface-muted">
-      <Container className="py-8">
+    <div className="bg-mirai-surface-muted pt-24 md:pt-0">
+      <Container className="pb-8 md:py-8">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-0.5">
             <h1 className="text-[22px] font-bold text-black leading-[1.48]">
