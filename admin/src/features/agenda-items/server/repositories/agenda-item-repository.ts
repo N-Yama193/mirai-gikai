@@ -18,7 +18,6 @@ export async function findAllAgendaItemsForSummary(): Promise<
     .select(
       "id, item_number, title, proposal_reason, ai_summary, ai_summary_status, ai_summary_generated_at, ai_summary_published_at, ai_summary_source_hash, policy_tags, is_featured, assemblies ( id, name, start_date )"
     )
-    .order("start_date", { referencedTable: "assemblies", ascending: false })
     .order("display_order", { ascending: true });
 
   if (error) {
@@ -26,16 +25,22 @@ export async function findAllAgendaItemsForSummary(): Promise<
     return [];
   }
 
-  return data.map((item) => {
-    const { assemblies, ...rest } = item;
-    return {
-      ...rest,
-      ai_summary: item.ai_summary as AiSummaryContent | null,
-      ai_summary_status:
-        item.ai_summary_status as AgendaItemSummaryRow["ai_summary_status"],
-      assembly: assemblies as AgendaItemSummaryRow["assembly"],
-    };
-  });
+  // PostgRESTの埋め込みリソース(assemblies)の列でトップレベルの並び順を
+  // 安定して制御できないため、display_order昇順で取得した後、
+  // 議会の開催日(start_date)降順でJS側に安定ソートし直す
+  // (同一議会内ではdisplay_orderの順序が保たれる)。
+  return data
+    .map((item) => {
+      const { assemblies, ...rest } = item;
+      return {
+        ...rest,
+        ai_summary: item.ai_summary as AiSummaryContent | null,
+        ai_summary_status:
+          item.ai_summary_status as AgendaItemSummaryRow["ai_summary_status"],
+        assembly: assemblies as AgendaItemSummaryRow["assembly"],
+      };
+    })
+    .sort((a, b) => b.assembly.start_date.localeCompare(a.assembly.start_date));
 }
 
 /**

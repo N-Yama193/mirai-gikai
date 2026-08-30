@@ -31,7 +31,6 @@ export async function findAllGeneralQuestionsForSummary(): Promise<
       assemblies ( id, name, start_date )
     `
     )
-    .order("start_date", { referencedTable: "assemblies", ascending: false })
     .order("order_number", { ascending: true });
 
   if (error) {
@@ -39,17 +38,23 @@ export async function findAllGeneralQuestionsForSummary(): Promise<
     return [];
   }
 
-  return data.map((question) => {
-    const { question_topics, assemblies, ...rest } = question;
-    return {
-      ...rest,
-      topics: question_topics,
-      ai_summary: question.ai_summary as AiSummaryContent | null,
-      ai_summary_status:
-        question.ai_summary_status as GeneralQuestionSummaryRow["ai_summary_status"],
-      assembly: assemblies as GeneralQuestionSummaryRow["assembly"],
-    };
-  });
+  // PostgRESTの埋め込みリソース(assemblies)の列でトップレベルの並び順を
+  // 安定して制御できないため、order_number昇順で取得した後、
+  // 議会の開催日(start_date)降順でJS側に安定ソートし直す
+  // (同一議会内ではorder_numberの順序が保たれる)。
+  return data
+    .map((question) => {
+      const { question_topics, assemblies, ...rest } = question;
+      return {
+        ...rest,
+        topics: question_topics,
+        ai_summary: question.ai_summary as AiSummaryContent | null,
+        ai_summary_status:
+          question.ai_summary_status as GeneralQuestionSummaryRow["ai_summary_status"],
+        assembly: assemblies as GeneralQuestionSummaryRow["assembly"],
+      };
+    })
+    .sort((a, b) => b.assembly.start_date.localeCompare(a.assembly.start_date));
 }
 
 /**
