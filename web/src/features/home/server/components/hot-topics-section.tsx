@@ -109,7 +109,16 @@ export function HotTopicsSection({ assemblies }: HotTopicsSectionProps) {
   const assemblyMap = new Map(assemblies.map((a) => [a.id, a]));
 
   return (
-    <section className="rounded-3xl border border-hirokawa-indigo/10 bg-hirokawa-indigo/[0.04] p-6 md:p-8">
+    // ページ全体がMainLayout(max-w-[700px] mx-auto)+Container(max-w-4xl mx-auto
+    // px-4等)の二重の幅制限に収まる1カラムレイアウトのため、通常の子要素は最大
+    // 700px幅にしかならない。このセクションだけはPCで目立たせたいので、
+    // margin-left:50% + translate-x(-50%) の定番のコンテナ breakout テクニックで
+    // 祖先の幅制限をすべて突き抜け、ビューポート中央に再センタリングする。
+    // 幅はclamp(700px, 50vw, 896px) とし、mdブレークポイント直後の狭い画面では
+    // 元の700px（グリッドが窮屈にならない下限）を保ち、画面が広がるほど
+    // 画面幅の50%相当まで広がり、896px（Containerのmax-w-4xlと同じ値）で頭打ちにする。
+    // モバイル(md未満)はbreakout用のクラスを一切付けないため、これまでと表示は変わらない。
+    <section className="rounded-3xl border border-hirokawa-indigo/10 bg-hirokawa-indigo/[0.04] p-6 md:ml-[50%] md:w-[clamp(700px,50vw,896px)] md:-translate-x-1/2 md:p-8">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
           <h2 className="text-2xl font-bold text-hirokawa-indigo">
