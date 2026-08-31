@@ -28,7 +28,7 @@ function HotTopicCard({ topic }: { topic: HotTopic }) {
   const [primaryLink, ...restLinks] = topic.links;
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-mirai-border-light bg-white p-5">
+    <div className="flex w-[220px] shrink-0 snap-start flex-col gap-3 rounded-xl border border-mirai-border-light bg-white p-5">
       <Icon className="h-6 w-6 text-hirokawa-indigo" strokeWidth={1.75} />
       <h3 className="text-base font-bold text-black">{topic.title}</h3>
       <p className="text-sm text-mirai-text-subtle">{topic.description}</p>
@@ -77,7 +77,8 @@ export function HotTopicsSection() {
           これまでの一般質問・議案から、いま関心が高いテーマを集めました
         </p>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+      {/* 右端は画面いっぱいまで広げる（Container の右paddingを相殺しつつ末尾カードの余白を確保）。 */}
+      <div className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 pb-2 scrollbar-hide sm:-mr-6 sm:pr-6 lg:-mr-8 lg:pr-8">
         {HOT_TOPICS.map((topic) => (
           <HotTopicCard key={topic.id} topic={topic} />
         ))}

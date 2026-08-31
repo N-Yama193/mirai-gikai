@@ -17,6 +17,8 @@ export default async function Home() {
 
       <Container className="py-10">
         <div className="flex flex-col gap-14">
+          <HotTopicsSection />
+
           {latestAssembly ? (
             <LatestAssemblySection assembly={latestAssembly} />
           ) : (
@@ -24,8 +26,6 @@ export default async function Home() {
               定例会・臨時会はまだ登録されていません
             </p>
           )}
-
-          <HotTopicsSection />
 
           {pastAssemblies.length > 0 && (
             <section className="flex flex-col gap-6">
