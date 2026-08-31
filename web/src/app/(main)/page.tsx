@@ -17,7 +17,7 @@ export default async function Home() {
 
       <Container className="py-10">
         <div className="flex flex-col gap-14">
-          <HotTopicsSection />
+          <HotTopicsSection assemblies={assemblies} />
 
           {latestAssembly ? (
             <LatestAssemblySection assembly={latestAssembly} />
