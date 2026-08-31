@@ -122,9 +122,13 @@ export function HotTopicsSection({ assemblies }: HotTopicsSectionProps) {
         {/*
           モバイル(md未満)は横スクロールカルーセル。右端は画面いっぱいまで広げる
           （Container の右paddingを相殺しつつ末尾カードの余白を確保）。
-          md以上ではgridに切り替え、5枚のカードを折り返しつつ全部見せる。
+          md以上ではgrid-cols-2に切り替える。このサイト全体がmax-w-[700px]の
+          細い1カラムレイアウト（main-layout.tsx）のため、3列以上にすると
+          カード幅が100〜130px程度まで狭くなり、タイトルが1〜2文字ずつ折り返す
+          窮屈な見た目になる。2列だと実測で278×280〜360px程度になり、
+          正方形に近いバランスの良いカードになる。
         */}
-        <div className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 pb-2 scrollbar-hide sm:-mr-6 sm:pr-6 md:mr-0 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 md:pr-0 lg:grid-cols-5">
+        <div className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 pb-2 scrollbar-hide sm:-mr-6 sm:pr-6 md:mr-0 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:pr-0">
           {HOT_TOPICS.map((topic) => (
             <HotTopicCard
               key={topic.id}
