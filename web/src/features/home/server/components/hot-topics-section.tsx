@@ -57,7 +57,7 @@ function HotTopicCard({
   const [primaryLink, ...restLinks] = topic.links;
 
   return (
-    <div className="flex w-[240px] shrink-0 snap-start flex-col gap-3 rounded-xl border border-mirai-border-light bg-white p-6">
+    <div className="flex w-[240px] shrink-0 snap-start flex-col gap-3 rounded-xl border border-mirai-border-light bg-white p-6 md:w-auto">
       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-hirokawa-indigo/10">
         <Icon className="h-5 w-5 text-hirokawa-indigo" strokeWidth={1.75} />
       </div>
@@ -119,8 +119,12 @@ export function HotTopicsSection({ assemblies }: HotTopicsSectionProps) {
             議会でくり返し話題になっているテーマをまとめました
           </p>
         </div>
-        {/* 右端は画面いっぱいまで広げる（Container の右paddingを相殺しつつ末尾カードの余白を確保）。 */}
-        <div className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 pb-2 scrollbar-hide sm:-mr-6 sm:pr-6 lg:-mr-8 lg:pr-8">
+        {/*
+          モバイル(md未満)は横スクロールカルーセル。右端は画面いっぱいまで広げる
+          （Container の右paddingを相殺しつつ末尾カードの余白を確保）。
+          md以上ではgridに切り替え、5枚のカードを折り返しつつ全部見せる。
+        */}
+        <div className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 pb-2 scrollbar-hide sm:-mr-6 sm:pr-6 md:mr-0 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 md:pr-0 lg:grid-cols-5">
           {HOT_TOPICS.map((topic) => (
             <HotTopicCard
               key={topic.id}
