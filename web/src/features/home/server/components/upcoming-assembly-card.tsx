@@ -3,6 +3,22 @@ import type { Route } from "next";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { UPCOMING_ASSEMBLY } from "@/config/upcoming-assembly";
+import { getJapanTime } from "@/lib/utils/date";
+
+/** JST基準の "今日" を "YYYY-MM-DD" 形式で返す（getJapanTime()のローカルgetterで取り出す） */
+function todayInJapanAsIsoDate(): string {
+  const jstNow = getJapanTime();
+  const year = jstNow.getFullYear();
+  const month = String(jstNow.getMonth() + 1).padStart(2, "0");
+  const day = String(jstNow.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+/** 今日(JST)がsessionStartDate〜sessionEndDate（両端含む）の範囲内かどうか */
+function isSessionOngoing(sessionStartDate: string, sessionEndDate: string) {
+  const today = todayInJapanAsIsoDate();
+  return today >= sessionStartDate && today <= sessionEndDate;
+}
 
 /**
  * トップページの「次の議会（傍聴案内）」カード。
@@ -16,12 +32,16 @@ export function UpcomingAssemblyCard() {
   const {
     name,
     sessionPeriod,
+    sessionStartDate,
+    sessionEndDate,
     generalQuestionSchedule,
     venue,
     visitInfo,
     referenceUrl,
     referenceLabel,
   } = UPCOMING_ASSEMBLY;
+
+  const ongoing = isSessionOngoing(sessionStartDate, sessionEndDate);
 
   return (
     <section className="rounded-3xl border border-mirai-border-light bg-white p-6 md:p-8">
@@ -33,9 +53,15 @@ export function UpcomingAssemblyCard() {
               strokeWidth={1.75}
             />
           </div>
-          <Badge className="w-fit rounded-full border-transparent bg-hirokawa-blue text-kasuri-white">
-            次の議会・傍聴案内
-          </Badge>
+          {ongoing ? (
+            <Badge variant="destructive" className="w-fit rounded-full">
+              開催中
+            </Badge>
+          ) : (
+            <Badge className="w-fit rounded-full border-transparent bg-hirokawa-blue text-kasuri-white">
+              次の議会・傍聴案内
+            </Badge>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">

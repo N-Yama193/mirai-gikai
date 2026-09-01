@@ -12,8 +12,15 @@
 export interface UpcomingAssemblyInfo {
   /** 定例会・臨時会の名称（例: "令和8年第3回(9月)定例会"） */
   name: string;
-  /** 会期（例: "2026年9月3日(木)〜9月17日(木)"） */
+  /** 会期の表示用文字列（例: "2026年9月3日(木)〜9月17日(木)"） */
   sessionPeriod: string;
+  /**
+   * 会期開始日（"YYYY-MM-DD"形式）。「開催中」バッジの判定にのみ使う機械可読な値。
+   * 表示にはsessionPeriodを使うため、日付を変更する際は両方を書き換えること。
+   */
+  sessionStartDate: string;
+  /** 会期終了日（"YYYY-MM-DD"形式）。用途はsessionStartDateと同じ。 */
+  sessionEndDate: string;
   /** 一般質問（本会議）の日時（例: "9月3日(木)・9月4日(金) 9時30分開会"） */
   generalQuestionSchedule: string;
   /** 開催場所（例: "広川町役場4階 議場"） */
@@ -29,6 +36,8 @@ export interface UpcomingAssemblyInfo {
 export const UPCOMING_ASSEMBLY: UpcomingAssemblyInfo | null = {
   name: "令和8年第3回(9月)定例会",
   sessionPeriod: "2026年9月3日(木)〜9月17日(木)",
+  sessionStartDate: "2026-09-03",
+  sessionEndDate: "2026-09-17",
   generalQuestionSchedule: "9月3日(木)・9月4日(金) 9時30分開会",
   venue: "広川町役場4階 議場",
   visitInfo:
