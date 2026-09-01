@@ -5,6 +5,7 @@ import { AssemblyList } from "@/features/assemblies/server/components/assembly-l
 import { LatestAssemblySection } from "@/features/assemblies/server/components/latest-assembly-section";
 import { getAssemblies } from "@/features/assemblies/server/loaders/get-assemblies";
 import { HotTopicsSection } from "@/features/home/server/components/hot-topics-section";
+import { UpcomingAssemblyCard } from "@/features/home/server/components/upcoming-assembly-card";
 
 export default async function Home() {
   // getAssemblies() は年度・回次の降順で返すため、先頭が直近の定例会になる
@@ -18,6 +19,8 @@ export default async function Home() {
       <Container className="py-10">
         <div className="flex flex-col gap-14">
           <HotTopicsSection assemblies={assemblies} />
+
+          <UpcomingAssemblyCard />
 
           {latestAssembly ? (
             <LatestAssemblySection assembly={latestAssembly} />
