@@ -39,6 +39,8 @@ export function UpcomingAssemblyCard() {
     visitInfo,
     referenceUrl,
     referenceLabel,
+    liveStreamUrl,
+    liveStreamLabel,
   } = UPCOMING_ASSEMBLY;
 
   const ongoing = isSessionOngoing(sessionStartDate, sessionEndDate);
@@ -58,7 +60,7 @@ export function UpcomingAssemblyCard() {
               開催中
             </Badge>
           ) : (
-            <Badge className="w-fit rounded-full border-transparent bg-hirokawa-blue text-kasuri-white">
+            <Badge className="w-fit rounded-full border-transparent bg-lime-600 text-white">
               次の議会・傍聴案内
             </Badge>
           )}
@@ -83,15 +85,27 @@ export function UpcomingAssemblyCard() {
 
         <p className="text-sm text-mirai-text-subtle">{visitInfo}</p>
 
-        <Link
-          href={referenceUrl as Route}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-fit items-center gap-1 text-sm font-bold text-hirokawa-indigo hover:underline"
-        >
-          {referenceLabel}
-          <ExternalLink className="h-3.5 w-3.5" />
-        </Link>
+        <div className="flex flex-col gap-2">
+          <Link
+            href={liveStreamUrl as Route}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-fit items-center gap-1 text-sm font-bold text-hirokawa-indigo hover:underline"
+          >
+            {liveStreamLabel}
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
+
+          <Link
+            href={referenceUrl as Route}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-fit items-center gap-1 text-sm font-bold text-hirokawa-indigo hover:underline"
+          >
+            {referenceLabel}
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </section>
   );

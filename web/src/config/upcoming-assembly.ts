@@ -31,6 +31,13 @@ export interface UpcomingAssemblyInfo {
   referenceUrl: string;
   /** 参考リンクのラベル */
   referenceLabel: string;
+  /**
+   * ライブ中継の案内ページURL。中継自体は本会議当日だけ有効になる仕組みのため、
+   * 固定のYouTube URLではなく、広川町公式サイトの「議会中継」案内ページを指す。
+   */
+  liveStreamUrl: string;
+  /** ライブ中継リンクの表示文言 */
+  liveStreamLabel: string;
 }
 
 export const UPCOMING_ASSEMBLY: UpcomingAssemblyInfo | null = {
@@ -45,4 +52,7 @@ export const UPCOMING_ASSEMBLY: UpcomingAssemblyInfo | null = {
   referenceUrl:
     "https://www.town.hirokawa.fukuoka.jp/soshiki/gikai_jimukyoku/1/1/4/2/4615.html",
   referenceLabel: "広川町議会 議会傍聴について",
+  liveStreamUrl:
+    "https://www.town.hirokawa.fukuoka.jp/soshiki/gikai_jimukyoku/1/1/gikaityuukei/4636.html",
+  liveStreamLabel: "当日はこちらからライブ中継を見られます",
 };
