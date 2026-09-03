@@ -53,6 +53,6 @@ export const UPCOMING_ASSEMBLY: UpcomingAssemblyInfo | null = {
     "https://www.town.hirokawa.fukuoka.jp/soshiki/gikai_jimukyoku/1/1/4/2/4615.html",
   referenceLabel: "広川町議会 議会傍聴について",
   liveStreamUrl:
-    "https://www.town.hirokawa.fukuoka.jp/soshiki/gikai_jimukyoku/1/1/gikaityuukei/4636.html",
-  liveStreamLabel: "当日はこちらからライブ中継を見られます",
+    "https://www.town.hirokawa.fukuoka.jp/soshiki/gikai_jimukyoku/1/1/gikaityuukei/index.html",
+  liveStreamLabel: "配信状況はこちらでご確認ください",
 };
